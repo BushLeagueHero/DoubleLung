@@ -2,7 +2,8 @@ import os
 from glob import glob
 from asyncio import sleep
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
+from pytz import utc
 
 from discord import Intents, Embed, File
 from discord.ext.commands import Bot as BotBase
@@ -10,7 +11,7 @@ from discord.ext.commands import Context
 from discord.ext.commands import CommandNotFound
 
 
-PREFIX = ("!", ".", "+")
+PREFIX = (".")
 OWNER_IDS = [371811001319948288]
 COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
 
@@ -32,7 +33,7 @@ class Bot(BotBase):
         self.ready = False
         self.cogs_ready = Ready()
         self.guild = None
-        self.scheduler = AsyncIOScheduler()
+        self.scheduler = BlockingScheduler(timezone=utc)
 
         super().__init__(
             command_prefix = PREFIX, 
@@ -76,10 +77,7 @@ class Bot(BotBase):
 
     async def on_error(self, err, *args, **kwargs):
         if err == "on_command_error":
-            await args[0].send("A command error has occurred.")
-
-        channel = self.get_channel(796850946809921569)
-        await channel.send("A general error has occurred.")
+            await args[0].send("There was an error in your command. Please check spelling, punctuation and usage. For assistance use the !commands command.")
 
         raise
 
@@ -93,8 +91,8 @@ class Bot(BotBase):
  
     async def on_ready(self):
         if not self.ready:
-            self.guild = self.get_guild(654351662370127874)
-            self.stdout = self.get_channel(796850946809921569)
+            self.guild = self.get_guild(796850946809921566)
+            self.stdout = self.get_channel(796851194801946655)
 
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)

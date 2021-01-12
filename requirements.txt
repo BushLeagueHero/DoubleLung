@@ -1,6 +1,2 @@
-json
 discord
-asyncio
 apscheduler
-dnspython
-PyNaCL

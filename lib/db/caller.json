@@ -1,0 +1,16 @@
+{
+    "roedeer":[{"name":["Roe Deer Caller"],"level":["1"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Roe Deer"]}]
+    ,"screamer":[{"name":["Axis Deer 'Screamer' Caller"],"level":["1"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Axis Deer"]}]
+    ,"jackrabbit":[{"name":["Predator 'Jackrabbit' Caller"],"level":["1"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Side-Striped Jackal", "Coyote", "Red Fox", "Eurasian Lynx"]}]
+    ,"goose":[{"name":["Short Reed Canada Goose Caller"],"level":["1"],"range":["500"],"duration":["90"],"strength":["40"],"hunt":["Canada Goose"]}]
+    ,"duck":[{"name":["Beacon Deluxe Duck Caller"],"level":["1"],"range":["500"],"duration":["25"],"strength":["40"],"hunt":["Mallard"]}]
+    ,"wildboar":[{"name":["Wild Boar Caller"],"level":["2"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Warthog"]}]
+    ,"bleat":[{"name":["Deer 'Bleat' Caller"],"level":["2"],"range":["150"],"duration":["90"],"strength":["50"],"hunt":["Whitetail Deer", "Blacktail Deer"]}]
+    ,"grunt":[{"name":["Deer 'Grunt' Caller"],"level":["2"],"range":["250"],"duration":["90"],"strength":["25"],"hunt":["Whitetail Deer", "Blacktail Deer"]}]
+    ,"antlerrattler":[{"name":["Antler Rattler"],"level":["2"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Fallow Deer", "Reindeer", "Lesser Kudu", "Gemsbok", "Blackbuck"]}]
+    ,"snortwheeze":[{"name":["Buck 'Snort Wheeze' Caller"],"level":["2"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Whitetail Deer", "Springbok", "Blue Wildebeest", "Lesser Kudu", "Mule Deer"]}]
+    ,"distressedfawn":[{"name":["Predator 'Distressed Fawn' Caller"],"level":["3"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Black Bear", "Euroasian Brown Bear", "Puma"]}]
+    ,"elk":[{"name":["Elk Caller"],"level":["3"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Roosevelt Elk"]}]
+    ,"reddeer":[{"name":["Red Deer Caller"],"level":["3"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Red Deer"]}]
+    ,"moose":[{"name":["Moose Caller"],"level":["4"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Moose"]}]
+}

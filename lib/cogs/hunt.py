@@ -29,13 +29,13 @@ stat_description = {"class"         :       "Class",
                     "pistolammo"    :       "Pistol Ammo",
                     "shotgunammo"   :       "Shotgun Ammo",
                     "bowammo"       :       "Arrow and Bolt",
-                    "rifles"         :       "Usable Rifles",
-                    "pistols"        :       "Usable Pistols",
-                    "shotguns"       :       "Usable Shotguns",
-                    "bows"           :       "Usable Bows and Crossbows",
-                    "scents"         :       "Scents Available",
-                    "callers"        :       "Effective Callers"}
-general_stats = {   "class"         :       ["Class",False],
+                    "rifles"        :       "Usable Rifles",
+                    "pistols"       :       "Usable Pistols",
+                    "shotguns"      :       "Usable Shotguns",
+                    "bows"          :       "Usable Bows and Crossbows",
+                    "scents"        :       "Scents Available",
+                    "callers"       :       "Effective Callers"}
+general_stats =    {"class"         :       ["Class",False],
                     "location"      :       ["Location",True],
                     "fur"           :       ["Fur Types",True],
                     "behavior"      :       ["Behavior Traits",False],
@@ -43,26 +43,31 @@ general_stats = {   "class"         :       ["Class",False],
                     "senses"        :       ["Senses Qualities",False],
                     "social"        :       ["Social Traits",False],
                     "active"        :       ["High Activity Level",False]}
-score_stats = {     "difficulty"    :       ["Max Difficulty",True],
+score_stats =      {"difficulty"    :       ["Max Difficulty",True],
                     "maxweight"     :       ["Maximum Weight",True],
-                    "maxscore"      :       ["Max Score",False],
+                    "maxscore"      :       ["Max Score",True],
                     "silver"        :       ["Min Silver",True],
                     "gold"          :       ["Min Gold",True],
                     "diamond"       :       ["Min Diamond",True]}
-need_stats = {      "feed"          :       ["Feed Times",False],
-                    "drink"         :       ["Drink Times",False],
-                    "rest"          :       ["Rest Times",False],
+need_stats =       {"feed"          :       ["Feed Times",True],
+                    "drink"         :       ["Drink Times",True],
+                    "rest"          :       ["Rest Times",True],
                     "unknown"       :       ["Unkown Need Zone Times",False]}
-equiptment_stats = {"rifleammo"     :       ["Rifle Ammo",False],
-                    "rifles"         :       ["Usable Rifles",True],
-                    "pistolammo"    :       ["Pistol Ammo",False],
-                    "pistols"        :       ["Usable Pistols",True],
-                    "shotgunammo"   :       ["Shotgun Ammo",False],
-                    "shotguns"       :       ["Usable Shotguns",True],
-                    "bowammo"       :       ["Arrow and Bolt ",False],
-                    "bows"           :       ["Usable Bows and Crossbows",False],
-                    "scents"         :       ["Scents Available",False],
-                    "callers"        :       ["Effective Callers",False]}
+equipment_stats =  {"rifleammo"     :       ["Rifle Ammo",True],
+                    "rifles"        :       ["Usable Rifles",True],
+                    "break1"        :       ["\u200b",True],
+                    "pistolammo"    :       ["Pistol Ammo",True],
+                    "pistols"       :       ["Usable Pistols",True],
+                    "break2"        :       ["\u200b",True],
+                    "shotgunammo"   :       ["Shotgun Ammo",True],
+                    "shotguns"      :       ["Usable Shotguns",True],
+                    "break3"        :       ["\u200b",True],
+                    "bowammo"       :       ["Arrow and Bolt ",True],
+                    "bows"          :       ["Usable Bows and Crossbows",True],
+                    "break4"        :       ["\u200b",True],
+                    "callers"       :       ["Effective Callers",True],
+                    "scents"        :       ["Scents Available",True],
+                    "break5"        :       ["\u200b",True]}
 
 dt = datetime.now()
 dt_formatted = dt.strftime("%b %d %Y %H:%M:%S")
@@ -71,23 +76,88 @@ class Hunt(Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @command(name="commands")
-    async def show_commands(self,ctx):
-        embed = Embed(title="Available Stats", description="Hunt commands start with the animal name (no spaces), and then a stat value.", color=0xFF0000)
-        embed.set_author(name="DoubleLung Bot")
-        embed.set_thumbnail(url=self.bot.guild.icon_url)
+    async def get_stats(self,ctx,user_hunt,user_stat,embed):
+        if user_stat=="all":
+            for key in general_stats:
+                stat_data = hunt_array[user_hunt][0][key]
 
-        fields =    [("Hunt Commands","mallard, scrubhare, jackrabbit, harlequinduck, turkey, canadagoose, europeanrabbit, europeanhare, cinnamonteal, sidestripedjackal, coyote, siberianmuskdeer, redfox, feralgoat, chamois, blackbuck, springbok, axisdeer, roedeer, eurasianlynx, bighornsheep, wildboar, sikadeer, pronghorn, lesserkudu, warthog, iberianmouflon, beceiteibex, gredosibex, southeasternspanishibex, rondaibex, fallowdeer, blacktaildeer, whitetaildeer, feralpig, mountaingoat, puma, mountainlion, iberianwolf, graywolf, bluewildebeest, muledeer, reddeer, reindeer, caribou, blackbear, grizzlybear, eurasianbrownbear, gemsbok, rockymountainelk, rooseveltelk, moose, waterbuffalo, capebuffalo, lion, plainsbison, europeanbison",False),
-                    ("Grouped Stats","All, General, Score, Needs, Equiptment",False),
-                    ("Individual Stats","Class, Difficulty, Max Weight, Silver, Gold, Diamond, Max Score, Location, Fur, Behavior, Habitat, Senses, Social, Active, Feed, Drink, Rest, Unknown, Rifle Ammo, Pistol Ammo, Shotgun Ammo, Bow Ammo, Rifles, Pistols, Shotguns, Bows, Scents, Callers",False),
-                    ("Hunt Command Examples","!coyote all, !whitetaildeer max weight, !pronghorn score",False)]
+                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
+            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
 
-        for name, value, inline in fields:
-            embed.add_field(name=name, value=value, inline=inline)
+            await self.bot.stdout.send(embed=embed)
+            embed.clear_fields()
 
-        embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-        await self.bot.stdout.send(embed=embed)
+            for key in score_stats:
+                stat_data = hunt_array[user_hunt][0][key]
 
+                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
+            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
+            
+            await self.bot.stdout.send(embed=embed)
+            embed.clear_fields()
+            
+            for key in need_stats:
+                stat_data = hunt_array[user_hunt][0][key]
+
+                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
+            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
+            
+            await self.bot.stdout.send(embed=embed)
+            embed.clear_fields()
+        
+            for key in equipment_stats:
+                stat_data = hunt_array[user_hunt][0][key]
+
+                embed.add_field(name=equipment_stats[key][0], value="\n".join(i for i in stat_data), inline=equipment_stats[key][1])
+            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
+            
+            await self.bot.stdout.send(embed=embed)
+            embed.clear_fields()
+
+        elif user_stat=="general":
+            for key in general_stats:
+                stat_data = hunt_array[user_hunt][0][key]
+
+                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
+            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
+            
+            await self.bot.stdout.send(embed=embed)
+
+        elif user_stat=="score" or user_stat=="scores":
+            for key in score_stats:
+                stat_data = hunt_array[user_hunt][0][key]
+
+                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
+            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
+            
+            await self.bot.stdout.send(embed=embed)
+
+        elif user_stat=="need" or user_stat=="needs" or user_stat=="zone" or user_stat=="zones":
+            for key in need_stats:
+                stat_data = hunt_array[user_hunt][0][key]
+
+                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
+            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
+            
+            await self.bot.stdout.send(embed=embed)
+
+        elif user_stat=="equipment" or user_stat=="item" or user_stat=="items":
+            for key in equipment_stats:
+                stat_data = hunt_array[user_hunt][0][key]
+
+                embed.add_field(name=equipment_stats[key][0], value="\n".join(i for i in stat_data), inline=equipment_stats[key][1])
+            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
+            
+            await self.bot.stdout.send(embed=embed)
+
+        else:
+            stat_data = hunt_array[user_hunt][0][user_stat]
+
+            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
+            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
+            
+            await self.bot.stdout.send(embed=embed)
+        
         await ctx.message.delete()
 
     @command(name="mallard")
@@ -99,92 +169,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="scrubhare")
     async def get_scrubhare(self,ctx,*,stat):
@@ -195,92 +180,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="jackrabbit")
     async def get_jackrabbit(self,ctx,*,stat):
@@ -291,92 +191,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="harlequinduck")
     async def get_harlequinduck(self,ctx,*,stat):
@@ -387,92 +202,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)  
 
     @command(name="turkey")
     async def get_turkey(self,ctx,*,stat):
@@ -483,92 +213,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)  
 
     @command(name="canadagoose")
     async def get_canadagoose(self,ctx,*,stat):
@@ -579,92 +224,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)  
 
     @command(name="europeanrabbit")
     async def get_europeanrabbit(self,ctx,*,stat):
@@ -675,92 +235,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="europeanhare")
     async def get_europeanhare(self,ctx,*,stat):
@@ -771,92 +246,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed) 
 
     @command(name="cinnamonteal")
     async def get_cinnamonteal(self,ctx,*,stat):
@@ -867,92 +257,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="sidestripedjackal")
     async def get_sidestripedjackal(self,ctx,*,stat):
@@ -963,92 +268,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="coyote")
     async def get_coyote(self,ctx,*,stat):
@@ -1059,92 +279,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="siberianmuskdeer")
     async def get_siberianmuskdeer(self,ctx,*,stat):
@@ -1155,92 +290,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="redfox")
     async def get_redfox(self,ctx,*,stat):
@@ -1251,92 +301,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="feralgoat")
     async def get_feralgoat(self,ctx,*,stat):
@@ -1347,92 +312,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)   
 
     @command(name="chamois")
     async def get_chamois(self,ctx,*,stat):
@@ -1443,92 +323,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="blackbuck")
     async def get_blackbuck(self,ctx,*,stat):
@@ -1539,92 +334,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="springbok")
     async def get_springbok(self,ctx,*,stat):
@@ -1635,92 +345,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)     
 
     @command(name="axisdeer")
     async def get_axisdeer(self,ctx,*,stat):
@@ -1731,92 +356,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)    
 
     @command(name="roedeer")
     async def get_roedeer(self,ctx,*,stat):
@@ -1827,92 +367,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="eurasianlynx")
     async def get_eurasianlynx(self,ctx,*,stat):
@@ -1923,92 +378,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="bighornsheep")
     async def get_bighornsheep(self,ctx,*,stat):
@@ -2019,92 +389,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)    
 
     @command(name="wildboar")
     async def get_wildboar(self,ctx,*,stat):
@@ -2115,92 +400,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="sikadeer")
     async def get_sikadeer(self,ctx,*,stat):
@@ -2211,92 +411,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="pronghorn")
     async def get_pronghorn(self,ctx,*,stat):
@@ -2307,92 +422,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="lesserkudu")
     async def get_lesserkudu(self,ctx,*,stat):
@@ -2403,92 +433,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="warthog")
     async def get_warthog(self,ctx,*,stat):
@@ -2499,92 +444,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="iberianmouflon")
     async def get_iberianmouflon(self,ctx,*,stat):
@@ -2595,92 +455,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="beceiteibex")
     async def get_beceiteibex(self,ctx,*,stat):
@@ -2691,92 +466,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="gredosibex")
     async def get_gredosibex(self,ctx,*,stat):
@@ -2787,92 +477,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="southeasternspanishibex", aliases=["spanishibex"])
     async def get_southeasternspanishibex(self,ctx,*,stat):
@@ -2883,92 +488,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
     @command(name="rondaibex")
     async def get_rondaibex(self,ctx,*,stat):
@@ -2979,92 +499,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
     @command(name="fallowdeer")
     async def get_fallowdeer(self,ctx,*,stat):
@@ -3075,92 +510,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="blacktaildeer")
     async def get_blacktaildeer(self,ctx,*,stat):
@@ -3171,92 +521,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="whitetaildeer")
     async def get_whitetaildeer(self,ctx,*,stat):
@@ -3267,92 +532,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="feralpig")
     async def get_feralpig(self,ctx,*,stat):
@@ -3363,92 +543,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
     @command(name="mountaingoat")
     async def get_smountaingoat(self,ctx,*,stat):
@@ -3459,92 +554,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="puma")
     async def get_spuma(self,ctx,*,stat):
@@ -3555,92 +565,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="mountainlion")
     async def get_mountainlion(self,ctx,*,stat):
@@ -3651,92 +576,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="iberianwolf")
     async def get_iberianwolf(self,ctx,*,stat):
@@ -3747,92 +587,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="graywolf")
     async def get_graywolf(self,ctx,*,stat):
@@ -3843,92 +598,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
     @command(name="bluewildebeest")
     async def get_bluewildebeest(self,ctx,*,stat):
@@ -3939,92 +609,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
     @command(name="muledeer")
     async def get_muledeer(self,ctx,*,stat):
@@ -4035,92 +620,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="reddeer")
     async def get_reddeer(self,ctx,*,stat):
@@ -4131,92 +631,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
     @command(name="reindeer")
     async def get_reindeer(self,ctx,*,stat):
@@ -4227,92 +642,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="caribou")
     async def get_caribou(self,ctx,*,stat):
@@ -4323,92 +653,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="blackbear")
     async def get_blackbear(self,ctx,*,stat):
@@ -4419,92 +664,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="grizzlybear")
     async def get_grizzlybear(self,ctx,*,stat):
@@ -4515,92 +675,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)
 
     @command(name="eurasianbrownbear", aliases=["brownbear"])
     async def get_eurasianbrownbear(self,ctx,*,stat):
@@ -4611,92 +686,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)     
 
     @command(name="gemsbok")
     async def get_gemsbok(self,ctx,*,stat):
@@ -4707,92 +697,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="rockymountainelk")
     async def get_rockymountainelk(self,ctx,*,stat):
@@ -4803,92 +708,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="rooseveltelk")
     async def get_rooseveltelk(self,ctx,*,stat):
@@ -4899,92 +719,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="moose")
     async def get_moose(self,ctx,*,stat):
@@ -4995,92 +730,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="waterbuffalo")
     async def get_waterbuffalo(self,ctx,*,stat):
@@ -5091,92 +741,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="capebuffalo")
     async def get_capebuffalo(self,ctx,*,stat):
@@ -5187,92 +752,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="lion")
     async def get_lion(self,ctx,*,stat):
@@ -5283,92 +763,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
     @command(name="plainsbison")
     async def get_plainsbison(self,ctx,*,stat):
@@ -5379,92 +774,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @command(name="europeanbison")
     async def get_europeanbison(self,ctx,*,stat):
@@ -5475,92 +785,7 @@ class Hunt(Cog):
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         
-        if user_stat=="all":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-            
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-            embed.clear_fields()
-
-        elif user_stat=="general":
-            for key in general_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="score":
-            embed = Embed(title="Mallard", color=0xFF0000)
-            embed.set_author(name="DoubleLung Bot")
-            embed.set_thumbnail(url=self.bot.guild.icon_url)
-
-            for key in score_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="needs":
-            for key in need_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        elif user_stat=="equiptment":
-            for key in equiptment_stats:
-                stat_data = hunt_array[user_hunt][0][key]
-
-                embed.add_field(name=equiptment_stats[key][0], value="\n".join(i for i in stat_data), inline=equiptment_stats[key][1])
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        else:
-            stat_data = hunt_array[user_hunt][0][user_stat]
-
-            embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
-            embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-            
-            await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
     @Cog.listener()
     async def on_ready(self):
