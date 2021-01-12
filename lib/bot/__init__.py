@@ -10,10 +10,14 @@ from discord.ext.commands import Bot as BotBase
 from discord.ext.commands import Context
 from discord.ext.commands import CommandNotFound
 
-
-PREFIX = (".")
 OWNER_IDS = [371811001319948288]
-COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
+if os.name=="nt":
+    COGS = [path.split("\\")[-1][:-3] for path in glob("./lib/cogs/*.py")]
+else:
+    COGS = [path.split("/")[-1][:-3] for path in glob("./lib/cogs/*.py")]
+with open("./lib/bot/prefix.0", "r", encoding = "utf-8") as pf:
+    CHANNEL_PREFIX = tuple(pf.read())      
+PREFIX = CHANNEL_PREFIX
 
 class Ready(object):
     def __init__(self):
@@ -60,7 +64,7 @@ class Bot(BotBase):
         print("Stauts: Initializing")
         super().run(self.TOKEN, reconnect = True)
 
-    async def process_commands(self, message):
+    async def process_commands(self,message):
         ctx = await self.get_context(message, cls=Context)
 
         if ctx.command is not None and ctx.guild is not None:
@@ -75,9 +79,8 @@ class Bot(BotBase):
     async def on_disconnect(self):
         print("Status: Offline")
 
-    async def on_error(self, err, *args, **kwargs):
-        if err == "on_command_error":
-            await args[0].send("There was an error in your command. Please check spelling, punctuation and usage. For assistance use the !commands command.")
+    async def on_error(self,err,*args,**kwargs):
+        await args[0].send("There was an error in your command. Please check spelling, punctuation and usage. For assistance use the !commands command.")
 
         raise
 
@@ -85,14 +88,22 @@ class Bot(BotBase):
         if isinstance(exc, CommandNotFound):
             pass
         elif hasattr(exc, "original"):
-            raise exc.original
+            pass
         else:
+            print("c")
             raise exc
- 
+
     async def on_ready(self):
         if not self.ready:
-            self.guild = self.get_guild(796850946809921566)
-            self.stdout = self.get_channel(796851194801946655)
+            with open("./lib/bot/guild.0", "r", encoding = "utf-8") as gf:
+                self.GUILD = int(gf.read())
+
+            self.guild = self.get_guild(self.GUILD)
+
+            with open("./lib/bot/channel.0", "r", encoding = "utf-8") as cf:
+                self.CHANNEL = int(cf.read())
+            
+            self.stdout = self.get_channel(self.CHANNEL)
 
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
