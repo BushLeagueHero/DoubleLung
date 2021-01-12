@@ -136,9 +136,6 @@ class Weapon(Cog):
 
         await self.bot.stdout.send(embed=embed)
 
-        await ctx.message.delete()
-
-
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:

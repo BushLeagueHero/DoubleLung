@@ -28,9 +28,7 @@ class General(Cog):
         embed.add_field(name="Available Help Commands", value="\n".join(i for i in general_commands), inline=False)
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
 
-        await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.bot.stdout.send(embed=embed)        
 
     @command(name="hunthelp",aliases=["huntshelp,helphunt,helphunts"])
     async def show_hunt_commands(self,ctx):
@@ -47,9 +45,7 @@ class General(Cog):
             embed.add_field(name=name, value=value, inline=inline)
 
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-        await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.bot.stdout.send(embed=embed)      
 
     @command(name="callerhelp",aliases=["callershelp,helpcaller,helpcallers"])
     async def show_callers(self,ctx):
@@ -65,9 +61,7 @@ class General(Cog):
             embed.add_field(name=name, value=value, inline=inline)
 
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-        await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.bot.stdout.send(embed=embed)       
 
     @command(name="scenthelp",aliases=["scentshelp,helpscent,helpscents"])
     async def show_scents(self,ctx):
@@ -78,9 +72,7 @@ class General(Cog):
         embed.add_field(name="Scent Commands", value="!Scents", inline=False)
 
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-        await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.bot.stdout.send(embed=embed)      
     
     @command(name="weaponhelp",aliases=["weaponshelp,helpweapon,helpweapons"])
     async def show_weapons(self,ctx):
@@ -97,9 +89,7 @@ class General(Cog):
             embed.add_field(name=name, value=value, inline=inline)
 
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-        await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.bot.stdout.send(embed=embed)       
 
     @command(name="ammohelp",aliases=["ammoshelp,helpammo,helpammos"])
     async def show_ammos(self,ctx):
@@ -116,9 +106,7 @@ class General(Cog):
             embed.add_field(name=name, value=value, inline=inline)
 
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-        await self.bot.stdout.send(embed=embed)
-
-        await ctx.message.delete()
+        await self.bot.stdout.send(embed=embed)        
 
     @Cog.listener()
     async def on_ready(self):

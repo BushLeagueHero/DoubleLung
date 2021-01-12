@@ -158,7 +158,7 @@ class Hunt(Cog):
             
             await self.bot.stdout.send(embed=embed)
         
-        await ctx.message.delete()
+        
 
     @command(name="mallard")
     async def get_mallard(self,ctx,*,stat):

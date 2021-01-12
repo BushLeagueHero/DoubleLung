@@ -34,15 +34,12 @@ class Caller(Cog):
             stat_data = caller_array[user_stat][0][key]
             embed.add_field(name=caller_stats[key][0], value="\n".join(i for i in stat_data), inline=caller_stats[key][1])
 
-        embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
-        await ctx.message.delete()
+        embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")       
         
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
 
         await self.bot.stdout.send(embed=embed)
-
 
     @Cog.listener()
     async def on_ready(self):
