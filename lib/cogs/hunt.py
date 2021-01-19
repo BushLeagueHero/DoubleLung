@@ -1,5 +1,4 @@
 import json
-from difflib import get_close_matches as matches
 from datetime import datetime
 
 from discord import Member
@@ -11,15 +10,15 @@ hunt_array = json.load(open("./lib/db/hunt.json"))
 stat_description = {"class"         :       "Class",
                     "difficulty"    :       "Max Difficulty",
                     "maxweight"     :       "Maximum Weight",
-                    "silverscore"   :       "Minimum Silver Score",
-                    "goldscore"     :       "Minimum Gold Score",
-                    "diamondscore"  :       "Minimum Diamond Score",
+                    "silver"        :       "Minimum Silver Score",
+                    "gold"          :       "Minimum Gold Score",
+                    "diamond"       :       "Minimum Diamond Score",
                     "maxscore"      :       "Maximum Score",
                     "location"      :       "Location",
                     "fur"           :       "Fur Types",
                     "behavior"      :       "Behavior Traits",
                     "habitat"       :       "Habitat",
-                    "detection"     :       "Detection Traits",
+                    "senses"        :       "Senses Qualities",
                     "social"        :       "Social Traits",
                     "active"        :       "Activity Cycle",
                     "feed"          :       "Feed Times",
@@ -30,44 +29,44 @@ stat_description = {"class"         :       "Class",
                     "pistolammo"    :       "Pistol Ammo",
                     "shotgunammo"   :       "Shotgun Ammo",
                     "bowammo"       :       "Arrow and Bolt",
-                    "rifle"         :       "Usable Rifles",
-                    "pistol"        :       "Usable Pistols",
-                    "shotgun"       :       "Usable Shotguns",
-                    "bow"           :       "Usable Bows and Crossbows",
-                    "scent"         :       "Scents Available",
-                    "caller"        :       "Effective Callers"}
+                    "rifles"        :       "Usable Rifles",
+                    "pistols"       :       "Usable Pistols",
+                    "shotguns"      :       "Usable Shotguns",
+                    "bows"          :       "Usable Bows and Crossbows",
+                    "scents"        :       "Scents Available",
+                    "callers"       :       "Effective Callers"}
 general_stats =    {"class"         :       ["Class",False],
                     "location"      :       ["Location",True],
                     "fur"           :       ["Fur Types",True],
                     "behavior"      :       ["Behavior Traits",False],
                     "habitat"       :       ["Habitat",False],
-                    "detection"     :       ["Detection Traits",False],
+                    "senses"        :       ["Senses Qualities",False],
                     "social"        :       ["Social Traits",False],
                     "active"        :       ["High Activity Level",False]}
 score_stats =      {"difficulty"    :       ["Max Difficulty",True],
                     "maxweight"     :       ["Maximum Weight",True],
                     "maxscore"      :       ["Max Score",True],
-                    "silverscore"   :       ["Min Silver",True],
-                    "goldscore"     :       ["Min Gold",True],
-                    "diamondscore"  :       ["Min Diamond",True]}
+                    "silver"        :       ["Min Silver",True],
+                    "gold"          :       ["Min Gold",True],
+                    "diamond"       :       ["Min Diamond",True]}
 need_stats =       {"feed"          :       ["Feed Times",True],
                     "drink"         :       ["Drink Times",True],
                     "rest"          :       ["Rest Times",True],
                     "unknown"       :       ["Unkown Need Zone Times",False]}
 equipment_stats =  {"rifleammo"     :       ["Rifle Ammo",True],
-                    "rifle"         :       ["Usable Rifles",True],
+                    "rifles"        :       ["Usable Rifles",True],
                     "break1"        :       ["\u200b",True],
                     "pistolammo"    :       ["Pistol Ammo",True],
-                    "pistol"        :       ["Usable Pistols",True],
+                    "pistols"       :       ["Usable Pistols",True],
                     "break2"        :       ["\u200b",True],
                     "shotgunammo"   :       ["Shotgun Ammo",True],
-                    "shotgun"       :       ["Usable Shotguns",True],
+                    "shotguns"      :       ["Usable Shotguns",True],
                     "break3"        :       ["\u200b",True],
                     "bowammo"       :       ["Arrow and Bolt ",True],
-                    "bow"           :       ["Usable Bows and Crossbows",True],
+                    "bows"          :       ["Usable Bows and Crossbows",True],
                     "break4"        :       ["\u200b",True],
-                    "caller"        :       ["Effective Callers",True],
-                    "scent"         :       ["Scents Available",True],
+                    "callers"       :       ["Effective Callers",True],
+                    "scents"        :       ["Scents Available",True],
                     "break5"        :       ["\u200b",True]}
 
 dt = datetime.now()
@@ -130,7 +129,7 @@ class Hunt(Cog):
 
                 embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
-
+            
             await self.bot.stdout.send(embed=embed)
 
         elif user_stat=="need" or user_stat=="needs" or user_stat=="zone" or user_stat=="zones":
@@ -158,8 +157,10 @@ class Hunt(Cog):
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
             
             await self.bot.stdout.send(embed=embed)
+        
+        
 
-    @command(name="mallard",aliases=["mallards"])
+    @command(name="mallard")
     async def get_mallard(self,ctx,*,stat):
         user_hunt = "mallard"
         user_stat = stat.lower().replace(" ","")
@@ -170,7 +171,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="scrubhare",aliases=["scrubhares"])
+    @command(name="scrubhare")
     async def get_scrubhare(self,ctx,*,stat):
         user_hunt = "scrubhare"
         user_stat = stat.lower().replace(" ","")
@@ -181,7 +182,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="jackrabbit",aliases=["jackrabbits"])
+    @command(name="jackrabbit")
     async def get_jackrabbit(self,ctx,*,stat):
         user_hunt = "jackrabbit"
         user_stat = stat.lower().replace(" ","")
@@ -192,7 +193,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="harlequinduck",aliases=["harlequinducks","harlequin","harlequins"])
+    @command(name="harlequinduck")
     async def get_harlequinduck(self,ctx,*,stat):
         user_hunt = "harlequinduck"
         user_stat = stat.lower().replace(" ","")
@@ -203,7 +204,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)  
 
-    @command(name="turkey",aliases=["turkeys","turkies"])
+    @command(name="turkey")
     async def get_turkey(self,ctx,*,stat):
         user_hunt = "turkey"
         user_stat = stat.lower().replace(" ","")
@@ -214,7 +215,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)  
 
-    @command(name="canadagoose",aliases=["canadageese"])
+    @command(name="canadagoose")
     async def get_canadagoose(self,ctx,*,stat):
         user_hunt = "canadagoose"
         user_stat = stat.lower().replace(" ","")
@@ -225,7 +226,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)  
 
-    @command(name="europeanrabbit",aliases=["europeanrabbits"])
+    @command(name="europeanrabbit")
     async def get_europeanrabbit(self,ctx,*,stat):
         user_hunt = "europeanrabbit"
         user_stat = stat.lower().replace(" ","")
@@ -236,7 +237,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="europeanhare",aliases=["europeanhareas"])
+    @command(name="europeanhare")
     async def get_europeanhare(self,ctx,*,stat):
         user_hunt = "europeanhare"
         user_stat = stat.lower().replace(" ","")
@@ -247,7 +248,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed) 
 
-    @command(name="cinnamonteal",aliases=["cinnamonteals"])
+    @command(name="cinnamonteal")
     async def get_cinnamonteal(self,ctx,*,stat):
         user_hunt = "cinnamonteal"
         user_stat = stat.lower().replace(" ","")
@@ -258,7 +259,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="sidestripedjackal",aliases=["sidestripedjackals","side-stripedjackal","side-stripedjackals","stripedjackal","stripedjackals","jackal","jackals"])
+    @command(name="sidestripedjackal")
     async def get_sidestripedjackal(self,ctx,*,stat):
         user_hunt = "sidestripedjackal"
         user_stat = stat.lower().replace(" ","")
@@ -269,7 +270,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="coyote",aliases=["coyotes"])
+    @command(name="coyote")
     async def get_coyote(self,ctx,*,stat):
         user_hunt = "coyote"
         user_stat = stat.lower().replace(" ","")
@@ -280,7 +281,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="siberianmuskdeer",aliases=["muskdeer","siberianmuskdeers","muskdeers"])
+    @command(name="siberianmuskdeer")
     async def get_siberianmuskdeer(self,ctx,*,stat):
         user_hunt = "siberianmuskdeer"
         user_stat = stat.lower().replace(" ","")
@@ -291,7 +292,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="redfox",aliases=["redfoxes"])
+    @command(name="redfox")
     async def get_redfox(self,ctx,*,stat):
         user_hunt = "redfox"
         user_stat = stat.lower().replace(" ","")
@@ -302,7 +303,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="feralgoat",aliases=["feralgoats"])
+    @command(name="feralgoat")
     async def get_feralgoat(self,ctx,*,stat):
         user_hunt = "feralgoat"
         user_stat = stat.lower().replace(" ","")
@@ -313,7 +314,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)   
 
-    @command(name="chamois",aliases=["chamoises"])
+    @command(name="chamois")
     async def get_chamois(self,ctx,*,stat):
         user_hunt = "chamois"
         user_stat = stat.lower().replace(" ","")
@@ -324,7 +325,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="blackbuck",aliases=["blackbucks"])
+    @command(name="blackbuck")
     async def get_blackbuck(self,ctx,*,stat):
         user_hunt = "blackbuck"
         user_stat = stat.lower().replace(" ","")
@@ -335,7 +336,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="springbok",aliases=["springboks"])
+    @command(name="springbok")
     async def get_springbok(self,ctx,*,stat):
         user_hunt = "springbok"
         user_stat = stat.lower().replace(" ","")
@@ -346,7 +347,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)     
 
-    @command(name="axisdeer",aliases=["axisdeers"])
+    @command(name="axisdeer")
     async def get_axisdeer(self,ctx,*,stat):
         user_hunt = "axisdeer"
         user_stat = stat.lower().replace(" ","")
@@ -357,7 +358,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)    
 
-    @command(name="roedeer",aliases=["roedeers"])
+    @command(name="roedeer")
     async def get_roedeer(self,ctx,*,stat):
         user_hunt = "roedeer"
         user_stat = stat.lower().replace(" ","")
@@ -368,7 +369,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="eurasianlynx",aliases=["eurasianlynxes"])
+    @command(name="eurasianlynx")
     async def get_eurasianlynx(self,ctx,*,stat):
         user_hunt = "eurasianlynx"
         user_stat = stat.lower().replace(" ","")
@@ -379,7 +380,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="bighornsheep",aliases=["bighornsheeps","hornsheep","hornsheeps"])
+    @command(name="bighornsheep")
     async def get_bighornsheep(self,ctx,*,stat):
         user_hunt = "bighornsheep"
         user_stat = stat.lower().replace(" ","")
@@ -390,7 +391,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)    
 
-    @command(name="wildboar",aliases=["wildboars"])
+    @command(name="wildboar")
     async def get_wildboar(self,ctx,*,stat):
         user_hunt = "wildboar"
         user_stat = stat.lower().replace(" ","")
@@ -401,7 +402,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="sikadeer",aliases=["sika","sikadeers","sikas"])
+    @command(name="sikadeer")
     async def get_sikadeer(self,ctx,*,stat):
         user_hunt = "sikadeer"
         user_stat = stat.lower().replace(" ","")
@@ -412,7 +413,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="pronghorn",aliases=["pronghorns"])
+    @command(name="pronghorn")
     async def get_pronghorn(self,ctx,*,stat):
         user_hunt = "pronghorn"
         user_stat = stat.lower().replace(" ","")
@@ -423,7 +424,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="lesserkudu",aliases=["kudu","lesserkudus","kudus"])
+    @command(name="lesserkudu")
     async def get_lesserkudu(self,ctx,*,stat):
         user_hunt = "lesserkudu"
         user_stat = stat.lower().replace(" ","")
@@ -434,7 +435,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="warthog",aliases=["warthogs"])
+    @command(name="warthog")
     async def get_warthog(self,ctx,*,stat):
         user_hunt = "warthog"
         user_stat = stat.lower().replace(" ","")
@@ -445,7 +446,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="iberianmouflon",aliases=["mouflon","iberianmouflons","mouflons"])
+    @command(name="iberianmouflon")
     async def get_iberianmouflon(self,ctx,*,stat):
         user_hunt = "iberianmouflon"
         user_stat = stat.lower().replace(" ","")
@@ -456,7 +457,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="beceiteibex",aliases=["beceiteibexes"])
+    @command(name="beceiteibex")
     async def get_beceiteibex(self,ctx,*,stat):
         user_hunt = "beceiteibex"
         user_stat = stat.lower().replace(" ","")
@@ -467,7 +468,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="gredosibex",aliases=["gredosibexes"])
+    @command(name="gredosibex")
     async def get_gredosibex(self,ctx,*,stat):
         user_hunt = "gredosibex"
         user_stat = stat.lower().replace(" ","")
@@ -478,7 +479,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="southeasternspanishibex", aliases=["spanishibex","southeasternspanishibexes","spanishibexes"])
+    @command(name="southeasternspanishibex", aliases=["spanishibex"])
     async def get_southeasternspanishibex(self,ctx,*,stat):
         user_hunt = "southeasternspanishibex"
         user_stat = stat.lower().replace(" ","")
@@ -489,7 +490,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
-    @command(name="rondaibex",aliases=["rondaibexes"])
+    @command(name="rondaibex")
     async def get_rondaibex(self,ctx,*,stat):
         user_hunt = "rondaibex"
         user_stat = stat.lower().replace(" ","")
@@ -500,7 +501,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
-    @command(name="fallowdeer",aliases=["fallow","fallowdeers","fallows"])
+    @command(name="fallowdeer")
     async def get_fallowdeer(self,ctx,*,stat):
         user_hunt = "fallowdeer"
         user_stat = stat.lower().replace(" ","")
@@ -511,7 +512,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="blacktaildeer",aliases=["blacktail","blacktaildeers","blacktails"])
+    @command(name="blacktaildeer")
     async def get_blacktaildeer(self,ctx,*,stat):
         user_hunt = "blacktaildeer"
         user_stat = stat.lower().replace(" ","")
@@ -522,7 +523,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="whitetaildeer",aliases=["whitetail","whitetaildeers","whitetails"])
+    @command(name="whitetaildeer")
     async def get_whitetaildeer(self,ctx,*,stat):
         user_hunt = "whitetaildeer"
         user_stat = stat.lower().replace(" ","")
@@ -533,7 +534,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="feralpig",aliases=["feralpigs"])
+    @command(name="feralpig")
     async def get_feralpig(self,ctx,*,stat):
         user_hunt = "feralpig"
         user_stat = stat.lower().replace(" ","")
@@ -544,7 +545,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
-    @command(name="mountaingoat",aliases=["mountaingoats"])
+    @command(name="mountaingoat")
     async def get_smountaingoat(self,ctx,*,stat):
         user_hunt = "mountaingoat"
         user_stat = stat.lower().replace(" ","")
@@ -555,7 +556,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="puma",aliases=["pumas"])
+    @command(name="puma")
     async def get_spuma(self,ctx,*,stat):
         user_hunt = "puma"
         user_stat = stat.lower().replace(" ","")
@@ -566,7 +567,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="mountainlion",aliases=["mountainlions"])
+    @command(name="mountainlion")
     async def get_mountainlion(self,ctx,*,stat):
         user_hunt = "mountainlion"
         user_stat = stat.lower().replace(" ","")
@@ -577,7 +578,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="iberianwolf",aliases=["iberianwolves"])
+    @command(name="iberianwolf")
     async def get_iberianwolf(self,ctx,*,stat):
         user_hunt = "iberianwolf"
         user_stat = stat.lower().replace(" ","")
@@ -588,7 +589,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="graywolf",aliases=["graywolves"])
+    @command(name="graywolf")
     async def get_graywolf(self,ctx,*,stat):
         user_hunt = "graywolf"
         user_stat = stat.lower().replace(" ","")
@@ -599,7 +600,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
-    @command(name="bluewildebeest",aliases=["wildebeest","bluewildebeests","wildebeests"])
+    @command(name="bluewildebeest")
     async def get_bluewildebeest(self,ctx,*,stat):
         user_hunt = "bluewildebeest"
         user_stat = stat.lower().replace(" ","")
@@ -610,7 +611,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
-    @command(name="muledeer",aliases=["muledeers"])
+    @command(name="muledeer")
     async def get_muledeer(self,ctx,*,stat):
         user_hunt = "muledeer"
         user_stat = stat.lower().replace(" ","")
@@ -621,7 +622,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="reddeer",aliases=["reddeers"])
+    @command(name="reddeer")
     async def get_reddeer(self,ctx,*,stat):
         user_hunt = "reddeer"
         user_stat = stat.lower().replace(" ","")
@@ -632,7 +633,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)        
 
-    @command(name="reindeer",aliases=["reindeers"])
+    @command(name="reindeer")
     async def get_reindeer(self,ctx,*,stat):
         user_hunt = "reindeer"
         user_stat = stat.lower().replace(" ","")
@@ -643,7 +644,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="caribou",aliases=["caribous"])
+    @command(name="caribou")
     async def get_caribou(self,ctx,*,stat):
         user_hunt = "caribouk"
         user_stat = stat.lower().replace(" ","")
@@ -654,7 +655,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="blackbear",aliases=["blackbears"])
+    @command(name="blackbear")
     async def get_blackbear(self,ctx,*,stat):
         user_hunt = "blackbear"
         user_stat = stat.lower().replace(" ","")
@@ -665,7 +666,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="grizzlybear",aliases=["grizzly","grizzlybears","grizzlies"])
+    @command(name="grizzlybear")
     async def get_grizzlybear(self,ctx,*,stat):
         user_hunt = "grizzlybear"
         user_stat = stat.lower().replace(" ","")
@@ -676,7 +677,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)
 
-    @command(name="eurasianbrownbear", aliases=["brownbear","eurasianbrownbears","brownbears"])
+    @command(name="eurasianbrownbear", aliases=["brownbear"])
     async def get_eurasianbrownbear(self,ctx,*,stat):
         user_hunt = "eurasianbrownbear"
         user_stat = stat.lower().replace(" ","")
@@ -687,7 +688,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)     
 
-    @command(name="gemsbok",aliases=["gemsboks"])
+    @command(name="gemsbok")
     async def get_gemsbok(self,ctx,*,stat):
         user_hunt = "gemsbok"
         user_stat = stat.lower().replace(" ","")
@@ -698,7 +699,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="rockymountainelk",aliases=["mountainelk","rockymountainelks","mountainelks"])
+    @command(name="rockymountainelk")
     async def get_rockymountainelk(self,ctx,*,stat):
         user_hunt = "rockymountainelk"
         user_stat = stat.lower().replace(" ","")
@@ -709,7 +710,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="rooseveltelk",aliases=["rooseveltelks"])
+    @command(name="rooseveltelk")
     async def get_rooseveltelk(self,ctx,*,stat):
         user_hunt = "rooseveltelk"
         user_stat = stat.lower().replace(" ","")
@@ -720,7 +721,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="moose",aliases=["mooses"])
+    @command(name="moose")
     async def get_moose(self,ctx,*,stat):
         user_hunt = "moose"
         user_stat = stat.lower().replace(" ","")
@@ -731,7 +732,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="waterbuffalo",aliases=["waterbuffalos"])
+    @command(name="waterbuffalo")
     async def get_waterbuffalo(self,ctx,*,stat):
         user_hunt = "waterbuffalo"
         user_stat = stat.lower().replace(" ","")
@@ -742,7 +743,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="capebuffalo",aliases=["capebuffalos"])
+    @command(name="capebuffalo")
     async def get_capebuffalo(self,ctx,*,stat):
         user_hunt = "capebuffalo"
         user_stat = stat.lower().replace(" ","")
@@ -753,7 +754,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="lion",aliases=["llions"])
+    @command(name="lion")
     async def get_lion(self,ctx,*,stat):
         user_hunt = "lion"
         user_stat = stat.lower().replace(" ","")
@@ -764,7 +765,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)      
 
-    @command(name="plainsbison",aliases=["plainsbisons"])
+    @command(name="plainsbison")
     async def get_plainsbison(self,ctx,*,stat):
         user_hunt = "plainsbison"
         user_stat = stat.lower().replace(" ","")
@@ -775,7 +776,7 @@ class Hunt(Cog):
         
         await self.get_stats(ctx,user_hunt,user_stat,embed)       
 
-    @command(name="europeanbison",aliases=["europeanbisons"])
+    @command(name="europeanbison")
     async def get_europeanbison(self,ctx,*,stat):
         user_hunt = "europeanbison"
         user_stat = stat.lower().replace(" ","")

@@ -29,9 +29,9 @@ class Scent(Cog):
 
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
         
-        await self.bot.stdout.send(embed=embed)  
+        await self.bot.stdout.send(embed=embed)
 
-        await print(self.stdout)     
+        
 
     @Cog.listener()
     async def on_ready(self):

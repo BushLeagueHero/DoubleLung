@@ -26,6 +26,7 @@ penetration_stats = {"prange"       :   ["Range",True],
 compatible_stats =  {"weapon"       :   ["Compatible Weapon(s)",False],
                     "hunt"          :   ["Available Hunts",False]}
 
+
 class Ammo(Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -168,11 +169,14 @@ class Ammo(Cog):
                     stat_data = ammo_array[user_stat][0][c]
                     embed.add_field(name=compatible_stats[c][0],value=", ".join(i for i in stat_data),inline=compatible_stats[c][1])
 
+
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=self.bot.guild.icon_url)
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
 
-        await self.bot.stdout.send(embed=embed)  
+        await self.bot.stdout.send(embed=embed)
+
+        
 
     @Cog.listener()
     async def on_ready(self):
