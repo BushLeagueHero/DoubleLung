@@ -90,7 +90,6 @@ class Bot(BotBase):
         elif hasattr(exc, "original"):
             pass
         else:
-            print("c")
             raise exc
 
     async def on_ready(self):
@@ -104,11 +103,12 @@ class Bot(BotBase):
                 self.CHANNEL = int(cf.read())
             
             self.stdout = self.get_channel(self.CHANNEL)
+            self.stdlog = self.get_channel(798723281909186590)
 
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
 
-            await self.stdout.send("Status: Online")
+            await self.stdlog.send("Status: Online")
             self.ready = True
             print("Status: Ready")
         else:
@@ -116,6 +116,9 @@ class Bot(BotBase):
 
     async def on_message(self, message):
         if not message.author.bot:
+            self.user_guild = message.guild.id
+            self.user_channel = message.channel.id
+
             await self.process_commands(message)
     
 bot = Bot()
