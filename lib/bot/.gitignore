@@ -1,0 +1,4 @@
+# ignore intermediate run files and token file
+__pycache__/
+*.0
+!prefix.0
