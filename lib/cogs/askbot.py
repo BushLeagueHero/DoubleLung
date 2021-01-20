@@ -100,7 +100,7 @@ class Askbot(Cog):
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
-            self.bot.cogs_ready.ready_up("test")
+            self.bot.cogs_ready.ready_up("askbot")
 
 def setup(bot):
     bot.add_cog(Askbot(bot))

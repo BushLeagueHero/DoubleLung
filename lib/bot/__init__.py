@@ -1,6 +1,7 @@
 import os
 from glob import glob
 from asyncio import sleep
+import json
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from pytz import utc
@@ -115,10 +116,10 @@ class Bot(BotBase):
             print("Status: Reconnected")
 
     async def on_message(self, message):
-        if not message.author.bot:
-            self.user_guild = message.guild.id
-            self.user_channel = message.channel.id
+        with open('./lib/bot/server_deployments.json','r') as f:
+            deployed = json.load(f)
 
-            await self.process_commands(message)
+            if not message.author.bot:
+                await self.process_commands(message)
     
 bot = Bot()
