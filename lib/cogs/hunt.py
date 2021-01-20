@@ -78,6 +78,7 @@ class Hunt(Cog):
         self.bot = bot
 
     async def get_stats(self,ctx,user_hunt,user_stat,embed):
+        
         if user_stat=="all":
             for key in general_stats:
                 stat_data = hunt_array[user_hunt][0][key]
@@ -85,7 +86,7 @@ class Hunt(Cog):
                 embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
 
-            await self.bot.stdout.send(embed=embed)
+            await self.send_embed(ctx=ctx,embed=embed)
             embed.clear_fields()
 
             for key in score_stats:
@@ -94,7 +95,7 @@ class Hunt(Cog):
                 embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
             
-            await self.bot.stdout.send(embed=embed)
+            await self.send_embed(ctx=ctx,embed=embed)
             embed.clear_fields()
             
             for key in need_stats:
@@ -103,7 +104,7 @@ class Hunt(Cog):
                 embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
             
-            await self.bot.stdout.send(embed=embed)
+            await self.send_embed(ctx=ctx,embed=embed)
             embed.clear_fields()
         
             for key in equipment_stats:
@@ -112,7 +113,7 @@ class Hunt(Cog):
                 embed.add_field(name=equipment_stats[key][0], value="\n".join(i for i in stat_data), inline=equipment_stats[key][1])
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
             
-            await self.bot.stdout.send(embed=embed)
+            await self.send_embed(ctx=ctx,embed=embed)
             embed.clear_fields()
 
         elif user_stat=="general":
@@ -122,7 +123,7 @@ class Hunt(Cog):
                 embed.add_field(name=general_stats[key][0], value="\n".join(i for i in stat_data), inline=general_stats[key][1])
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
             
-            await self.bot.stdout.send(embed=embed)
+            await self.send_embed(ctx=ctx,embed=embed)
 
         elif user_stat=="score" or user_stat=="scores":
             for key in score_stats:
@@ -131,7 +132,7 @@ class Hunt(Cog):
                 embed.add_field(name=score_stats[key][0], value="\n".join(i for i in stat_data), inline=score_stats[key][1])
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
 
-            await self.bot.stdout.send(embed=embed)
+            await self.send_embed(ctx=ctx,embed=embed)
 
         elif user_stat=="need" or user_stat=="needs" or user_stat=="zone" or user_stat=="zones":
             for key in need_stats:
@@ -140,7 +141,7 @@ class Hunt(Cog):
                 embed.add_field(name=need_stats[key][0], value="\n".join(i for i in stat_data), inline=need_stats[key][1])
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
             
-            await self.bot.stdout.send(embed=embed)
+            await self.send_embed(ctx=ctx,embed=embed)
 
         elif user_stat=="equipment" or user_stat=="item" or user_stat=="items":
             for key in equipment_stats:
@@ -149,7 +150,7 @@ class Hunt(Cog):
                 embed.add_field(name=equipment_stats[key][0], value="\n".join(i for i in stat_data), inline=equipment_stats[key][1])
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
             
-            await self.bot.stdout.send(embed=embed)
+            await self.send_embed(ctx=ctx,embed=embed)
 
         else:
             stat_data = hunt_array[user_hunt][0][user_stat]
@@ -157,7 +158,15 @@ class Hunt(Cog):
             embed.add_field(name=stat_description[user_stat], value="\n".join(i for i in stat_data), inline=True)
             embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
             
-            await self.bot.stdout.send(embed=embed)
+            await self.send_embed(ctx=ctx, embed=embed)
+
+    async def send_embed(self,ctx,embed):
+        channel = self.bot.get_response_channel(ctx)
+        print("Trying to send embed to channel")
+        if channel is not None:
+            await channel.send(embed=embed)
+        else:
+            print("Message send denied (no channel available)")
 
     @command(name="mallard",aliases=["mallards"])
     async def get_mallard(self,ctx,*,stat):
