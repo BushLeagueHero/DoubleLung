@@ -1,5 +1,4 @@
 import os
-import json
 from glob import glob
 from asyncio import sleep
 import json
@@ -100,17 +99,13 @@ class Bot(BotBase):
                 self.GUILD = int(gf.read())
 
             self.guild = self.get_guild(self.GUILD)
-            
+
             with open("./lib/bot/channel.0", "r", encoding = "utf-8") as cf:
                 self.CHANNEL = int(cf.read())
-
-            with open("./lib/db/guilds.json", "r", encoding = "utf-8") as guilds:
-                self.guild_config = json.load(guilds)
-                print(self.guild_config)
-
-            self.stdout = self.get_channel(self.CHANNEL)
-            self.stdlog = self.get_channel(self.CHANNEL)
             
+            self.stdout = self.get_channel(self.CHANNEL)
+            self.stdlog = self.get_channel(798723281909186590)
+
             while not self.cogs_ready.all_ready():
                 await sleep(0.5)
 
@@ -121,53 +116,10 @@ class Bot(BotBase):
             print("Status: Reconnected")
 
     async def on_message(self, message):
-        if not message.author.bot:
-            await self.process_commands(message)
+        with open('./lib/bot/server_deployments.json','r') as f:
+            deployed = json.load(f)
 
+            if not message.author.bot:
+                await self.process_commands(message)
     
-    def get_response_channel(self, ctx):
-        """
-            This function will look in the guild configuration to find an appropriate response channel.
-            If no channel can be located, an error is thrown
-        """
-        print("Looking for response channel")
-        print(self.guild_config)
-        guild_id = f"{ctx.message.guild.id}"
-
-        if guild_id in self.guild_config:
-            print("guild exists in config")
-            # check the channel policy to see what happens by default with channel traffic
-            print(self.guild_config[guild_id]['channel_policy']['default'])
-            if self.guild_config[guild_id]['channel_policy']['default'] == "allow":
-                print("Channel policy is allow")
-                # if the channel is in the list, it is on a blacklist for either listen or respond. ignore it
-                if f"{ctx.message.channel.id}" in self.guild_config[guild_id]['channel_policy']['channels']:
-                    return None
-                else:
-                    return ctx.message.channel
-            else:
-                return None
-        else:
-            # create a new guild entry
-            print(f"Writing new guild entry for non-existant guild {ctx.message.guild.name} ({ctx.message.guild.id})")
-            self.guild_config[guild_id] = self.create_guild_entry(ctx.message.guild.name)
-            # write the json config back, then reload the guild config
-            with open("./lib/db/guilds.json", "w") as config:
-                json.dump(self.guild_config, config)
-            
-            with open("./lib/db/guilds.json", "r", encoding="utf-8") as config:
-                self.guild_config = json.load(config)
-
-            print(f"New guild configuration: {self.guild_config}")
-            return self.get_response_channel(ctx)
-
-    def create_guild_entry(self,guild_name):
-        return {
-            "alias": guild_name,
-            "channel_policy": {
-                "default": "allow",
-                "channels": {}
-            }
-        }
-
 bot = Bot()

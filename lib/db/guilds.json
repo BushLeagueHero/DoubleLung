@@ -1,1 +1,0 @@
-{"775725364575862794": {"alias": "testserver_beegul", "channel_policy": {"default": "allow", "channels": {"775725364575862798": {"listen": "deny", "respond": "deny"}}}}, "801549846359310347": {"alias": "testserver_beegul_2", "channel_policy": {"default": "allow", "channels": {}}}}
