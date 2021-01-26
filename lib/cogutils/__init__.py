@@ -1,0 +1,1 @@
+# eventually, code shared between cogs will go in this package

@@ -1,5 +1,5 @@
 import json
-from lib.cogs import hunt
+from . import hunt
 from difflib import get_close_matches as matches
 from datetime import datetime
 
@@ -89,13 +89,15 @@ class Askbot(Cog):
         
                 await ctx.invoke(self.bot.get_command(hunt_check[0]), stat=stat_attr)
             else:
-                await self.bot.stdout.send("There may be an issue with the stat for which you are searching.  Please double check your stat request and try again. You can use !hunthelp for a list and spelling of available stats.")
-                await self.bot.stdout.send("If you believe you have typed your question in correctly, try asking it a different way. I may be able to understand what you are asking better.")
-                await self.bot.stdlog.send(f"Message Stat Error: {question}")
+                if ctx.response_channel is not None:
+                    ctx.response_channel("There may be an issue with the stat for which you are searching.  Please double check your stat request and try again. You can use !hunthelp for a list and spelling of available stats.")
+                    ctx.response_channel("If you believe you have typed your question in correctly, try asking it a different way. I may be able to understand what you are asking better.")
+                #await self.bot.stdlog.send(f"Message Stat Error: {question}")
         else:
-            await self.bot.stdout.send("There may be an issue with the animal for which you are searching.  Please double check your animal and try again. You can use !hunthelp for a list and spelling of available animals.")
-            await self.bot.stdout.send("If you believe you have typed your question in correctly, try asking it a different way. I may be able to understand what you are asking better.")
-            await self.bot.stdlog.send(f"Message Hunt Error: {question}")
+            if ctx.response_channel is not None:
+                await ctx.response_channel("There may be an issue with the animal for which you are searching.  Please double check your animal and try again. You can use !hunthelp for a list and spelling of available animals.")
+                await ctx.response_channel("If you believe you have typed your question in correctly, try asking it a different way. I may be able to understand what you are asking better.")
+            #await self.bot.stdlog.send(f"Message Hunt Error: {question}")
 
     @Cog.listener()
     async def on_ready(self):

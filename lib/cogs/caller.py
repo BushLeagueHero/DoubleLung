@@ -37,9 +37,10 @@ class Caller(Cog):
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")       
         
         embed.set_author(name="DoubleLung Bot")
-        embed.set_thumbnail(url=self.bot.guild.icon_url)
+        embed.set_thumbnail(url=ctx.message.guild.icon_url)
 
-        await self.bot.stdout.send(embed=embed)
+        if ctx.response_channel is not None:
+            await ctx.response_channel.send(embed=embed)
 
     @Cog.listener()
     async def on_ready(self):

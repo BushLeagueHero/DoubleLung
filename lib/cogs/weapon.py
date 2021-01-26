@@ -131,10 +131,11 @@ class Weapon(Cog):
                 embed.add_field(name=hunts[key][0], value=", ".join(i for i in stat_data), inline=hunts[key][1])
 
         embed.set_author(name="DoubleLung Bot")
-        embed.set_thumbnail(url=self.bot.guild.icon_url)
+        embed.set_thumbnail(url=ctx.message.guild.icon_url)
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
 
-        await self.bot.stdout.send(embed=embed)
+        if ctx.response_channel is not None:
+            await ctx.response_channel.send(embed=embed)
 
     @Cog.listener()
     async def on_ready(self):
