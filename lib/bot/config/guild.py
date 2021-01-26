@@ -419,6 +419,7 @@ class GuildConfig():
             },
             "users-config": {
                 "default-policy": "allow",
-                "admin-commands": "deny"
+                "admin-commands": "deny",
+                "users": {}
             }
         }
