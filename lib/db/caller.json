@@ -1,16 +1,17 @@
 {
-    "roedeer":[{"name":["Roe Deer Caller"],"level":["1"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Roe Deer"]}]
-    ,"screamer":[{"name":["Axis Deer 'Screamer' Caller"],"level":["1"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Axis Deer"]}]
-    ,"jackrabbit":[{"name":["Predator 'Jackrabbit' Caller"],"level":["1"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Side-Striped Jackal", "Coyote", "Red Fox", "Eurasian Lynx"]}]
-    ,"goose":[{"name":["Short Reed Canada Goose Caller"],"level":["1"],"range":["500"],"duration":["90"],"strength":["40"],"hunt":["Canada Goose"]}]
-    ,"duck":[{"name":["Beacon Deluxe Duck Caller"],"level":["1"],"range":["500"],"duration":["25"],"strength":["40"],"hunt":["Mallard"]}]
-    ,"wildboar":[{"name":["Wild Boar Caller"],"level":["2"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Warthog"]}]
-    ,"bleat":[{"name":["Deer 'Bleat' Caller"],"level":["2"],"range":["150"],"duration":["90"],"strength":["50"],"hunt":["Whitetail Deer", "Blacktail Deer"]}]
-    ,"grunt":[{"name":["Deer 'Grunt' Caller"],"level":["2"],"range":["250"],"duration":["90"],"strength":["25"],"hunt":["Whitetail Deer", "Blacktail Deer"]}]
-    ,"antlerrattler":[{"name":["Antler Rattler"],"level":["2"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Fallow Deer", "Reindeer", "Lesser Kudu", "Gemsbok", "Blackbuck"]}]
-    ,"snortwheeze":[{"name":["Buck 'Snort Wheeze' Caller"],"level":["2"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Whitetail Deer", "Springbok", "Blue Wildebeest", "Lesser Kudu", "Mule Deer"]}]
-    ,"distressedfawn":[{"name":["Predator 'Distressed Fawn' Caller"],"level":["3"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Black Bear", "Euroasian Brown Bear", "Puma"]}]
-    ,"elk":[{"name":["Elk Caller"],"level":["3"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Roosevelt Elk"]}]
-    ,"reddeer":[{"name":["Red Deer Caller"],"level":["3"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Red Deer"]}]
-    ,"moose":[{"name":["Moose Caller"],"level":["4"],"range":["200"],"duration":["90"],"strength":["40"],"hunt":["Moose"]}]
+    "caller":[  {"callerid":"roedeer","caller":["Roe Deer Caller"],"level":["1"],"range":["200"],"duration":["90"],"strength":["40"],"callerspecies":["Roe Deer"]},
+                {"callerid":"screamer","caller":["Axis Deer 'Screamer' Caller"],"level":["1"],"range":["200"],"duration":["90"],"strength":["40"],"callerspecies":["Axis Deer"]},
+                {"callerid":"jackrabbit","caller":["Predator 'Jackrabbit' Caller"],"level":["1"],"range":["200"],"duration":["90"],"strength":["40"],"callerspecies":["Coyote","Eurasian Lynx","Lion","Red Fox","Side-Striped Jackal"]},
+                {"callerid":"goose","caller":["Short Reed Canada Goose Caller"],"level":["1"],"range":["500"],"duration":["90"],"strength":["40"],"callerspecies":["Canada Goose"]},
+                {"callerid":"duck","caller":["Beacon Deluxe Duck Caller"],"level":["1"],"range":["500"],"duration":["25"],"strength":["40"],"callerspecies":["Cinnamon Teal","Mallard"]},
+                {"callerid":"wildboar","caller":["Wild Boar Caller"],"level":["2"],"range":["200"],"duration":["90"],"strength":["40"],"callerspecies":["Feral Pig","Warthog","Wild Boar"]},
+                {"callerid":"bleat","caller":["Deer 'Bleat' Caller"],"level":["2"],"range":["150"],"duration":["90"],"strength":["50"],"callerspecies":["Blacktail Deer","Mule Deer","Whitetail Deer"]},
+                {"callerid":"grunt","caller":["Deer 'Grunt' Caller"],"level":["2"],"range":["250"],"duration":["90"],"strength":["25"],"callerspecies":["Blacktail Deer","Sika Deer","Whitetail Deer"]},
+                {"callerid":"antlerrattler","caller":["Antler Rattler"],"level":["2"],"range":["200"],"duration":["90"],"strength":["40"],"callerspecies":["Blackbuck","Caribou","Fallow Deer","Gemsbok","Lesser Kudu","Reindeer"]},
+                {"callerid":"snortwheeze","caller":["Buck 'Snort Wheeze' Caller"],"level":["2"],"range":["200"],"duration":["90"],"strength":["40"],"callerspecies":["Blue Wildebeest","Lesser Kudu","Springbok","Whitetail Deer"]},
+                {"callerid":"distressedfawn","caller":["Predator 'Distressed Fawn' Caller"],"level":["3"],"range":["200"],"duration":["90"],"strength":["40"],"callerspecies":["Black Bear","Brown Bear","Grey Wolf","Grizzly Bear","Iberian Wolf","Lion","Mountain Lion","Puma"]},
+                {"callerid":"elk","caller":["Elk Caller"],"level":["3"],"range":["200"],"duration":["90"],"strength":["40"],"callerspecies":["Rocky Mountain Elk","Roosevelt Elk"]},
+                {"callerid":"reddeer","caller":["Red Deer Caller"],"level":["3"],"range":["200"],"duration":["90"],"strength":["40"],"callerspecies":["Red Deer","Sika Deer"]},
+                {"callerid":"moose","caller":["Moose Caller"],"level":["4"],"range":["200"],"duration":["90"],"strength":["40"],"callerspecies":["Moose"]}
+    ]
 }

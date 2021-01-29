@@ -1,0 +1,12 @@
+{
+    "location":[{"locationid":"hirschfelden","location":["Hirschfelden"],"locationspecies":["Canada Goose","Red Fox","Roe Deer","Fallow Deer","Wild Boar","Red Deer","European Bison"]},
+                {"locationid":"laytonlakes","location":["Layton Lakes"],"locationspecies":["Jackrabbit","Mallard","Coyote","Blacktail Deer","Whitetail Deer","Black Bear","Moose","Roosevelt Elk"]},
+                {"locationid":"medvedtiaga","location":["Medved Tiaga"],"locationspecies":["Musk Deer","Eurasian Lynx","Reindeer","Brown Bear"]},
+                {"locationid":"vurhongasavanna","location":["Vurhonga Savanna"],"locationspecies":["Scrub Hare","Side-Striped Jackal","Springbok","Lesser Kudu","Warthog","Blue Wildebeest","Gemsbok","Cape Buffalo","Lion"]},
+                {"locationid":"parquefernando","location":["Parque Fernando"],"locationspecies":["Cinnamon Teal","Axis Deer","Blackbuck","Puma","Mule Deer","Water Buffalo"]},
+                {"locationid":"yukonvalley","location":["Yukon Valley"],"locationspecies":["Harlequin Duck","Grey Wolf","Caribou","Grizzly Bear","Plains Bison"]},
+                {"locationid":"cuatrocolinas","location":["Cuatro Colinas"],"locationspecies":["European Hare","Beceite Ibex","Gredos Ibex","Iberian Mouflon","Ronda Ibex","Southeastern Ibex","Iberian Wolf"]},
+                {"locationid":"silverridgepeaks","location":["Silver Ridge Peaks"],"locationspecies":["Turkey","Bighorn Sheep","Mountain Goat","Pronghorn","Mountain Lion","Rocky Mountain Elk"]},
+                {"locationid":"teawaroa","location":["Te Awaroa"],"locationspecies":["European Rabbit","Chamois","Feral Goat","Feral Pig","Sika Deer"]}
+    ]
+}
