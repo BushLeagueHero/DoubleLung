@@ -1,0 +1,382 @@
+{
+    "stats": [
+        {
+            "statid": "ammoid",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "caliber",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "lol_variant",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "type",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "lol_class",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "lol_erange",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "prange",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "lol_epenetration",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "ppenetration",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "lol_eexpansion",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "pexpansion",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "lol_ecost",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "pcost",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "weapon",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "ammospecies",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "ammunition"
+        },
+        {
+            "statid": "callerid",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "caller"
+        },
+        {
+            "statid": "caller",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "caller"
+        },
+        {
+            "statid": "level",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "caller"
+        },
+        {
+            "statid": "range",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "caller"
+        },
+        {
+            "statid": "duration",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "caller"
+        },
+        {
+            "statid": "strength",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "caller"
+        },
+        {
+            "statid": "callerspecies",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "caller"
+        },
+        {
+            "statid": "locationid",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "location"
+        },
+        {
+            "statid": "location",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "location"
+        },
+        {
+            "statid": "locationspecies",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "location"
+        },
+        {
+            "statid": "scentid",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "scent"
+        },
+        {
+            "statid": "scent",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "scent"
+        },
+        {
+            "statid": "units",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "scent"
+        },
+        {
+            "statid": "speciesid",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "Unnamed: 1",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "species",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "lol_location",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "class",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "maxlevel",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "behavior",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "habitat",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "senses",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "herd",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "activity",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "silver",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "gold",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "diamond",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "maxscore",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "maxweightkg",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "maxweightlbs",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "trackweight",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "lol_fur",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "lol_rest",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "lol_feed",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "lol_drink",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "lol_none",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "lol_active",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "ammo",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "species"
+        },
+        {
+            "statid": "weaponid",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "weapon"
+        },
+        {
+            "statid": "weaponname",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "weapon"
+        },
+        {
+            "statid": "weapontype",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "weapon"
+        },
+        {
+            "statid": "accuracy",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "weapon"
+        },
+        {
+            "statid": "recoil",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "weapon"
+        },
+        {
+            "statid": "reloadspeed",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "weapon"
+        },
+        {
+            "statid": "hipshot",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "weapon"
+        },
+        {
+            "statid": "magazinesize",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "weapon"
+        },
+        {
+            "statid": "useableammo",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "weapon"
+        },
+        {
+            "statid": "weaponspecies",
+            "description": "DESCRIPTION",
+            "inline": false,
+            "group": "weapon"
+        }
+    ]
+}
