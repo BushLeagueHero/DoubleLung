@@ -81,36 +81,37 @@ class Species(Cog):
 
         inline = stat_conf["inline"]
         
-        embed.add_field(name=name,value=values, inline=inline)
+        field_values = {"name":[name],"values":[values],"inline":[inline]}
+
+        return field_values
 
     def __build_embed(self,ctx,species,group):
         data_set = (self.__get_speciesid(species))  
         key_group = self.__determine_embed_keys(group)
         data = self.__pull_key_data(key_group,data_set)
 
-        embeds=[]
+        embed = Embed(title=data_set["species"][0],color=0xFF0000)
+        embed.set_author(name="DoubleLung Bot")
+        embed.set_thumbnail(url=ctx.message.guild.icon_url)
+
+        fields=[]
 
         for stat in key_group:
-            embed = Embed(title=data_set["species"],color=0xFF0000)
-            # embed.set_author(name="DoubleLung Bot")
-            # embed.set_thumbnail(url=ctx.message.guild.icon_url)
-
-            # self.__add_stat_to_embed(stat,data_set)
-
-            # embed.set_footer(text=f"{ctx.author.display_name}; {formatted_date()}")
-            
-            embeds.append(embed)
-
+            field = self.__add_stat_to_embed(stat,data_set)
+            fields.append(field)
             logger.debug(f"added embed for stat {stat}")
 
-        logger.debug(f"returning {len(embeds)} stat embeds")
-        return embeds
+        for i in range(0,len(fields)):
+            embed.add_field(name=fields[i]["name"][0],value=fields[i]["values"][0],inline=fields[i]["inline"][0])
+        embed.set_footer(text=f"{ctx.author.display_name}; {formatted_date()}")
+
+        logger.debug(f"returning {len(fields)} stat embeds")
+        return embed
 
     @command(name="species")
     async def get_species(self,ctx,species,group):
         embeds = self.__build_embed(ctx,species,group)
-        for embed in embeds:
-            await self.bot.command_embed_response(ctx,embed)
+        await ctx.message.channel.send(embed=embeds)
 
     @Cog.listener()
     async def on_ready(self):

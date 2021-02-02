@@ -4,11 +4,11 @@ from re import search
 data = json.load(open('./lib/db/object.json'))
 cmd_set = json.load(open('./lib/db/stat.json'))
 
-species = "blackbear"
-group = "GENERAL"
+species = "wildboar"
+group = "ZONE"
 
 #get speciesID
-def __get_speciesid(self,ctx,species):
+def __get_speciesid(species):
     for i in range(0,len(data["species"])):
         if data["species"][i]["speciesid"] == species:
             species_data_set = data["species"][i]
@@ -16,7 +16,7 @@ def __get_speciesid(self,ctx,species):
     return species_data_set
 
 #determine keys to use
-def __determine_embed_keys(self,ctx,group):
+def __determine_embed_keys(group):
     embed_keys = []
     for i in range(0,len(cmd_set["stats"])):
         if cmd_set["stats"][i]["group"] == group:
@@ -25,7 +25,7 @@ def __determine_embed_keys(self,ctx,group):
     return embed_keys
 
 #determine data for each key
-def __pull_key_data(self,ctx,embed_keys,species):
+def __pull_key_data(embed_keys,species):
     key_data = []
     for key in embed_keys:
         data = species[key]
@@ -34,7 +34,9 @@ def __pull_key_data(self,ctx,embed_keys,species):
     return key_data
 
 #add each stat from group in embed
-def __add_stat_to_embed(self,ctx,stat,data_set):
+def __add_stat_to_embed(stat,data_set):
+    title = data_set["species"][0]
+
     for i in range(0,len(cmd_set["stats"])):
         if cmd_set["stats"][i]["id"] == stat:
             stat_conf = cmd_set["stats"][i]
@@ -63,18 +65,19 @@ def __add_stat_to_embed(self,ctx,stat,data_set):
 
     inline = stat_conf["inline"]
 
+    print(title)
     print(name, values, inline)
     
     # embed.add_field(name=hunt_stats[stat][statkey][0],value="\n".join(i for i in stat_data), inline=hunt_stats[stat][statkey][1])
 
 #build embed
-def __build_embed(self,ctx,species,group):
+def __build_embed(species,group):
     data_set = (__get_speciesid(species))  
     key_group = __determine_embed_keys(group)
     data = __pull_key_data(key_group,data_set)
 
     for stat in key_group:
-        self.__add_stat_to_embed(stat,data_set)
+        __add_stat_to_embed(stat,data_set)
 
 
 
