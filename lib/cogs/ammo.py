@@ -6,7 +6,7 @@ from discord.ext.commands import Cog
 from discord.ext.commands import command
 from discord import Intents, Embed, File
 
-ammo_array = json.load(open("./lib/db/ammo.json"))
+ammo_array = json.load(open("./lib/db/ammunition.json"))
 
 dt = datetime.now()
 dt_formatted = dt.strftime("%b %d %Y %H:%M:%S")

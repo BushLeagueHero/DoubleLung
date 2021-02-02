@@ -8,7 +8,7 @@ species = "blackbear"
 group = "GENERAL"
 
 #get speciesID
-def __get_speciesid(species):
+def __get_speciesid(self,ctx,species):
     for i in range(0,len(data["species"])):
         if data["species"][i]["speciesid"] == species:
             species_data_set = data["species"][i]
@@ -16,7 +16,7 @@ def __get_speciesid(species):
     return species_data_set
 
 #determine keys to use
-def __determine_embed_keys(group):
+def __determine_embed_keys(self,ctx,group):
     embed_keys = []
     for i in range(0,len(cmd_set["stats"])):
         if cmd_set["stats"][i]["group"] == group:
@@ -25,7 +25,7 @@ def __determine_embed_keys(group):
     return embed_keys
 
 #determine data for each key
-def __pull_key_data(embed_keys,species):
+def __pull_key_data(self,ctx,embed_keys,species):
     key_data = []
     for key in embed_keys:
         data = species[key]
@@ -34,40 +34,47 @@ def __pull_key_data(embed_keys,species):
     return key_data
 
 #add each stat from group in embed
-def __add_stat_to_embed(stat,data_set):
+def __add_stat_to_embed(self,ctx,stat,data_set):
     for i in range(0,len(cmd_set["stats"])):
         if cmd_set["stats"][i]["id"] == stat:
             stat_conf = cmd_set["stats"][i]
 
     name = stat_conf["description"]
-    value_list = []
+    value_obj = []
     if search("lol_",stat):
-        stat_list = {}
-        for loc in range(len(data_set["lol_location"])):
-            for s in data_set[stat][loc]:
-                if s not in stat_list:
-                    stat_list[s] = []
-                stat_list[s].append(data_set["lol_location"][loc][0])
-        
-        for key,value in stat_list.items():
-            value_list.append(f"{key} ({value})")
+        if stat == "lol_location":
+            for n in range(0,len(data_set[stat])):
+                value_obj.append(data_set[stat][n][0])
+            values = "\n".join(i for i in value_obj)
+        else:
+            stat_list = {}
+            for loc in range(len(data_set["lol_location"])):
+                for s in data_set[stat][loc]:
+                    if s not in stat_list:
+                        stat_list[s] = []
+                    stat_list[s].append(data_set["lol_location"][loc][0])
+            
+            for key,value in stat_list.items():
+                value_obj.append(f"{key} ({', '.join(i for i in value)})")
+            
+            values = "\n".join(i for i in value_obj)
     else:
-        pass
+        values = "\n".join(i for i in data_set[stat])
 
     inline = stat_conf["inline"]
 
-    print(name, value_list, inline)
+    print(name, values, inline)
     
     # embed.add_field(name=hunt_stats[stat][statkey][0],value="\n".join(i for i in stat_data), inline=hunt_stats[stat][statkey][1])
 
 #build embed
-def __build_embed(species,group):
+def __build_embed(self,ctx,species,group):
     data_set = (__get_speciesid(species))  
     key_group = __determine_embed_keys(group)
     data = __pull_key_data(key_group,data_set)
 
     for stat in key_group:
-        __add_stat_to_embed(stat,data_set)
+        self.__add_stat_to_embed(stat,data_set)
 
 
 
