@@ -21,17 +21,17 @@ def formatted_date():
     dt_formatted = dt.strftime("%b %d %Y %H:%M:%S")
     return dt_formatted
 
-class Caller(Cog):
+class Location(Cog):
     def __init__(self, bot):
         self.bot = bot
     
     #get speciesID
-    def __get_callerid(self,caller):
-        for i in range(0,len(data["caller"])):
-            if data["caller"][i]["callerid"] == caller:
-                caller = data["caller"][i]
+    def __get_locationid(self,location):
+        for i in range(0,len(data["location"])):
+            if data["location"][i]["locationid"] == location:
+                location_data_set = data["location"][i]
 
-        return caller
+        return location_data_set
 
     #determine keys to use
     def __determine_embed_keys(self,group):
@@ -44,10 +44,10 @@ class Caller(Cog):
         return embed_keys
 
     #determine data for each key
-    def __pull_key_data(self,embed_keys,caller):
+    def __pull_key_data(self,embed_keys,location):
         key_data = []
         for key in embed_keys:
-            data = caller[key]
+            data = location[key]
             key_data.append({key:data})
         
         return key_data
@@ -55,11 +55,12 @@ class Caller(Cog):
     #add each stat from group in embed
     def __add_stat_to_embed(self,stat,data_set):
         for i in range(0,len(cmd_set["stats"])):
-            if cmd_set["stats"][i]["id"] == stat and cmd_set["stats"][i]["cmd_set"] == "caller":
+            if cmd_set["stats"][i]["id"] == stat and cmd_set["stats"][i]["cmd_set"] == "location":
                 stat_conf = cmd_set["stats"][i]
 
         name = stat_conf["description"]
-        if stat == "callerspecies":
+    
+        if stat == "locationspecies":
             values = ", ".join(i for i in sorted(data_set[stat]))
         else:
             values = "\n".join(i for i in sorted(data_set[stat]))
@@ -70,12 +71,12 @@ class Caller(Cog):
 
         return field_values
 
-    def __build_embed(self,ctx,caller):
-        data_set = (self.__get_callerid(caller))  
-        key_group = self.__determine_embed_keys("CALLER")
+    def __build_embed(self,ctx,location):
+        data_set = (self.__get_locationid(location))  
+        key_group = self.__determine_embed_keys("LOCATION")
         data = self.__pull_key_data(key_group,data_set)
 
-        embed = Embed(title=data_set["caller"][0],color=0x187206)
+        embed = Embed(title=data_set["location"][0],color=0x5E107A)
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=ctx.message.guild.icon_url)
 
@@ -93,15 +94,15 @@ class Caller(Cog):
         logger.debug(f"returning {len(fields)} stat embeds")
         return embed
 
-    @command(name="caller")
-    async def get_species(self,ctx,*,caller):
-        embeds = self.__build_embed(ctx,caller)
+    @command(name="location")
+    async def get_species(self,ctx,*,location):
+        embeds = self.__build_embed(ctx,location)
         await ctx.message.channel.send(embed=embeds)
 
     @Cog.listener()
     async def on_ready(self):
         if not self.bot.ready:
-            self.bot.cogs_ready.ready_up("caller")
+            self.bot.cogs_ready.ready_up("location")
 
 def setup(bot):
-    bot.add_cog(Caller(bot))
+    bot.add_cog(Location(bot))

@@ -1,181 +1,121 @@
 import json
+import logging
+
+from difflib import get_close_matches as matches
 from datetime import datetime
+from re import search
 
 from discord import Member
 from discord.ext.commands import Cog
 from discord.ext.commands import command
 from discord import Intents, Embed, File
 
-ammo_array = json.load(open("./lib/db/ammunition.json"))
+logger = logging.getLogger(f"doublelung.{__name__}")
 
-dt = datetime.now()
-dt_formatted = dt.strftime("%b %d %Y %H:%M:%S")
+data = json.load(open('./lib/db/object.json'))
+cmd_set = json.load(open('./lib/db/stat.json'))
 
-ammo_label =        {"caliber"      :   ["Caliber",False]}
-ammo_stats =        {"variant"      :   ["Variant",False],
-                    "type"          :   ["Ammo Type",True],
-                    "class"         :   ["Class Integrity",True]}
-expansion_stats =   {"erange"       :   ["Range",True],
-                    "epenetration"  :   ["Penetration",True],
-                    "eexpansion"    :   ["Expansion",True],
-                    "ecost"         :   ["Cost",False]}
-penetration_stats = {"prange"       :   ["Range",True],
-                    "ppenetration"  :   ["Penetration",True],              
-                    "pexpansion"    :   ["Expansion",True],              
-                    "pcost"         :   ["Cost",False]}
-compatible_stats =  {"weapon"       :   ["Compatible Weapon(s)",False],
-                    "hunt"          :   ["Available Hunts",False]}
 
+def formatted_date():
+    dt = datetime.now()
+    dt_formatted = dt.strftime("%b %d %Y %H:%M:%S")
+    return dt_formatted
 
 class Ammo(Cog):
-    def __init__(self,bot):
+    def __init__(self, bot):
         self.bot = bot
+    
+    #get speciesID
+    def __get_ammoid(self,ammo):
+        for i in range(0,len(data["ammo"])):
+            if data["ammo"][i]["ammoid"] == ammo:
+                ammo_data_set = data["ammo"][i]
 
-    @command(name="ammo")
-    async def show_ammo(self,ctx,*,ammo):
-        user_ammo = "ammo"
-        user_stat = ammo.lower().replace(" ","")
+        return ammo_data_set
 
-        if user_stat=="rifleammo" or user_stat=="rifles" or user_stat=="rifle":
-            embed = Embed(title="All Rifle Ammo", color=0xFF0000)
+    #determine keys to use
+    def __determine_embed_keys(self,group):
+        embed_keys = []
+        for n in range(0,15):
+            for i in range(0,len(cmd_set["stats"])):
+                if cmd_set["stats"][i]["group"] == group and cmd_set["stats"][i]["order"] == n:
+                    embed_keys.append(cmd_set["stats"][i]["id"])
+    
+        return embed_keys
 
-            rifle_ammo_command=[]
-            rifle_ammo_list=[]
-            rifle_list=[]
+    #determine data for each key
+    def __pull_key_data(self,embed_keys,ammo):
+        key_data = []
+        for key in embed_keys:
+            data = ammo[key]
+            key_data.append({key:data})
+        
+        return key_data
 
-            for ammo_dict in ammo_array:
-                ammo = ammo_array[ammo_dict][0]['type'][0]
+    #add each stat from group in embed
+    def __add_stat_to_embed(self,stat,data_set):
+        for i in range(0,len(cmd_set["stats"])):
+            if cmd_set["stats"][i]["id"] == stat and cmd_set["stats"][i]["cmd_set"] == "ammo":
+                stat_conf = cmd_set["stats"][i]
 
-                if ammo=="Rifle":
-                    command_name = ammo_dict
-                    ammo_name = ammo_array[ammo_dict][0]['caliber'][0]
-                    rifle_name = ammo_array[ammo_dict][0]['weapon']
-
-                    rifle_ammo_command.append(command_name)
-                    rifle_ammo_list.append(ammo_name)
-                    rifle_list.append(", ".join(i for i in rifle_name))
-
-            embed.add_field(name="Command",value="\n".join(i for i in rifle_ammo_command),inline=True)
-            embed.add_field(name="Ammo Caliber",value="\n".join(i for i in rifle_ammo_list),inline=True)
-            embed.add_field(name="Usable Weapons",value="\n".join(i for i in rifle_list),inline=True)
-        elif user_stat=="handgunammo" or user_stat=="handguns" or user_stat=="handgun":
-            embed = Embed(title="All Handgun Ammo", color=0xFF0000)
-
-            handgun_ammo_command=[]
-            handgun_ammo_list=[]
-            handgun_list=[]
-
-            for ammo_dict in ammo_array:
-                ammo = ammo_array[ammo_dict][0]['type'][0]
-
-                if ammo=="Pistol":
-                    command_name = ammo_dict
-                    ammo_name = ammo_array[ammo_dict][0]['caliber'][0]
-                    handgun_name = ammo_array[ammo_dict][0]['weapon']
-
-                    handgun_ammo_command.append(command_name)
-                    handgun_ammo_list.append(ammo_name)
-                    handgun_list.append(", ".join(i for i in handgun_name))
-
-            embed.add_field(name="Command",value="\n".join(i for i in handgun_ammo_command),inline=True)
-            embed.add_field(name="Ammo Caliber",value="\n".join(i for i in handgun_ammo_list),inline=True)
-            embed.add_field(name="Usable Weapons",value="\n".join(i for i in handgun_list),inline=True)
-        elif user_stat=="shotgunammo" or user_stat=="shotguns" or user_stat=="shotgun":
-            embed = Embed(title="All Shotgun Ammo", color=0xFF0000)
-
-            shotgun_ammo_command=[]
-            shotgun_ammo_list=[]
-            shotgun_list=[]
-
-            for ammo_dict in ammo_array:
-                ammo = ammo_array[ammo_dict][0]['type'][0]
-
-                if ammo=="Shotgun":
-                    command_name = ammo_dict
-                    ammo_name = ammo_array[ammo_dict][0]['caliber'][0]
-                    shotgun_name = ammo_array[ammo_dict][0]['weapon']
-
-                    if ammo_dict=="12bird" or ammo_dict=="12buck" or ammo_dict=="12slug":    
-                        shotgun_ammo_command.append(f"{command_name}\n")
-                        shotgun_ammo_list.append(f"{ammo_name}\n")
-                    else:
-                        shotgun_ammo_command.append(command_name)
-                        shotgun_ammo_list.append(ammo_name)
-                    shotgun_list.append(", ".join(i for i in shotgun_name))
-
-            embed.add_field(name="Command",value="\n".join(i for i in shotgun_ammo_command),inline=True)
-            embed.add_field(name="Ammo Caliber",value="\n".join(i for i in shotgun_ammo_list),inline=True)
-            embed.add_field(name="Usable Weapons",value="\n".join(i for i in shotgun_list),inline=True)
-        elif user_stat=="arrowammo" or user_stat=="arrows" or user_stat=="arrow":
-            embed = Embed(title="All Bolts and Arrows", color=0xFF0000)
-
-            arrows_ammo_command=[]
-            arrows_ammo_list=[]
-            arrows_list=[]
-
-            for ammo_dict in ammo_array:
-                ammo = ammo_array[ammo_dict][0]['type'][0]
-
-                if ammo=="Arrow" or ammo=="Bolt":
-                    command_name = ammo_dict
-                    ammo_name = ammo_array[ammo_dict][0]['caliber'][0]
-                    arrows_name = ammo_array[ammo_dict][0]['weapon']
-
-                    arrows_ammo_command.append(f"{command_name}\n\n")
-                    arrows_ammo_list.append(f"{ammo_name}\n\n")
-                    arrows_list.append(", ".join(i for i in arrows_name))
-
-            embed.add_field(name="Command",value="\n".join(i for i in arrows_ammo_command),inline=True)
-            embed.add_field(name="Ammo Caliber",value="\n".join(i for i in arrows_ammo_list),inline=True)
-            embed.add_field(name="Usable Weapons",value="\n".join(i for i in arrows_list),inline=True)
+        name = stat_conf["description"]
+        value_obj = []
+        if search("lol_",stat):
+            if stat == "lol_variant":
+                for n in range(0,len(data_set[stat])):
+                    value_obj.append(data_set[stat][n][0])
+                values = "\n".join(i for i in value_obj)
+            else:
+                stat_list = {}
+                for loc in range(len(data_set["lol_variant"])):
+                    for s in data_set[stat][loc]:
+                        if s not in stat_list:
+                            stat_list[s] = []
+                        stat_list[s].append(data_set["lol_variant"][loc][0])
+                
+                for key,value in sorted(stat_list.items()):
+                    value_obj.append(f"{key} ({', '.join(i for i in value)})")
+                
+                values = "\n".join(i for i in value_obj)
         else:
-            ammo_type = ammo_array[user_stat][0]["type"][0]
-            ammo_name = ammo_array[user_stat][0]["caliber"][0]
-            embed = Embed(title=ammo_name,color=0xFF0000)
+            if stat == "ammospecies":
+                values = ", ".join(i for i in sorted(data_set[stat]))
+            else:
+                values = "\n".join(i for i in sorted(data_set[stat]))
 
-            if ammo_type == "Rifle" or ammo_type == "Handgun":
-                for a in ammo_stats:
-                    stat_data = ammo_array[user_stat][0][a]
-                    embed.add_field(name=ammo_stats[a][0],value="\n".join(i for i in stat_data),inline=ammo_stats[a][1])
+        inline = stat_conf["inline"]
+        
+        field_values = {"name":[name],"values":[values],"inline":[inline]}
 
-                embed.add_field(name="\u200b",value="Expansion Vairant Stats",inline=False)
+        return field_values
 
-                for e in expansion_stats:
-                    stat_data = ammo_array[user_stat][0][e]
-                    embed.add_field(name=expansion_stats[e][0],value="\n".join(i for i in stat_data),inline=expansion_stats[e][1])
+    def __build_embed(self,ctx,ammo):
+        data_set = (self.__get_ammoid(ammo))  
+        key_group = self.__determine_embed_keys("AMMO")
+        data = self.__pull_key_data(key_group,data_set)
 
-                embed.add_field(name="\u200b",value="Penetration Vairant Stats",inline=False)
-
-                for p in penetration_stats:
-                    stat_data = ammo_array[user_stat][0][p]
-                    embed.add_field(name=penetration_stats[p][0],value="\n".join(i for i in stat_data),inline=penetration_stats[p][1])
-
-                for c in compatible_stats:
-                    stat_data = ammo_array[user_stat][0][c]
-                    embed.add_field(name=compatible_stats[c][0],value=", ".join(i for i in stat_data),inline=compatible_stats[c][1])
-
-            if ammo_type == "Shotgun" or ammo_type == "Arrow":
-                for a in ammo_stats:
-                    stat_data = ammo_array[user_stat][0][a]
-                    embed.add_field(name=ammo_stats[a][0],value="\n".join(i for i in stat_data),inline=ammo_stats[a][1])
-
-                embed.add_field(name="\u200b",value="Variant Stats",inline=False)
-
-                for e in expansion_stats:
-                    stat_data = ammo_array[user_stat][0][e]
-                    embed.add_field(name=expansion_stats[e][0],value="\n".join(i for i in stat_data),inline=expansion_stats[e][1])
-
-                for c in compatible_stats:
-                    stat_data = ammo_array[user_stat][0][c]
-                    embed.add_field(name=compatible_stats[c][0],value=", ".join(i for i in stat_data),inline=compatible_stats[c][1])
-
-
+        embed = Embed(title=data_set["caliber"][0],color=0x081680)
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=ctx.message.guild.icon_url)
-        embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
 
-        if ctx.response_channel is not None:
-            await ctx.response_channel.send(embed=embed)  
+        fields=[]
+
+        for stat in key_group:
+            field = self.__add_stat_to_embed(stat,data_set)
+            fields.append(field)
+            logger.debug(f"added embed for stat {stat}")
+
+        for i in range(0,len(fields)):
+            embed.add_field(name=fields[i]["name"][0],value=fields[i]["values"][0],inline=fields[i]["inline"][0])
+        embed.set_footer(text=f"{ctx.author.display_name}; {formatted_date()}")
+
+        logger.debug(f"returning {len(fields)} stat embeds")
+        return embed
+
+    @command(name="ammo")
+    async def get_species(self,ctx,*,ammo):
+        embeds = self.__build_embed(ctx,ammo)
+        await ctx.message.channel.send(embed=embeds)
 
     @Cog.listener()
     async def on_ready(self):

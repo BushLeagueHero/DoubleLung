@@ -36,9 +36,10 @@ class Species(Cog):
     #determine keys to use
     def __determine_embed_keys(self,group):
         embed_keys = []
-        for i in range(0,len(cmd_set["stats"])):
-            if cmd_set["stats"][i]["group"] == group:
-                embed_keys.append(cmd_set["stats"][i]["id"])
+        for n in range(0,10):
+            for i in range(0,len(cmd_set["stats"])):
+                if cmd_set["stats"][i]["group"] == group and cmd_set["stats"][i]["order"] == n:
+                    embed_keys.append(cmd_set["stats"][i]["id"])
     
         return embed_keys
 
@@ -54,7 +55,7 @@ class Species(Cog):
     #add each stat from group in embed
     def __add_stat_to_embed(self,stat,data_set):
         for i in range(0,len(cmd_set["stats"])):
-            if cmd_set["stats"][i]["id"] == stat:
+            if cmd_set["stats"][i]["id"] == stat and cmd_set["stats"][i]["cmd_set"] == "species":
                 stat_conf = cmd_set["stats"][i]
 
         name = stat_conf["description"]
@@ -90,7 +91,7 @@ class Species(Cog):
         key_group = self.__determine_embed_keys(group)
         data = self.__pull_key_data(key_group,data_set)
 
-        embed = Embed(title=data_set["species"][0],color=0xFF0000)
+        embed = Embed(title=data_set["species"][0],color=0x8F1B1B)
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=ctx.message.guild.icon_url)
 

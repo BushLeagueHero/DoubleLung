@@ -1,68 +1,10 @@
-﻿locationid,location,locationspecies
-hirschfelden,"[""Hirschfelden""]","[""Canada Goose"",""Red Fox"",""Roe Deer"",""Fallow Deer"",""Wild Boar"",""Red Deer"",""European Bison""]"
-laytonlakes,"[""Layton Lakes""]","[""Jackrabbit"",""Mallard"",""Coyote"",""Blacktail Deer"",""Whitetail Deer"",""Black Bear"",""Moose"",""Roosevelt Elk""]"
-medvedtiaga,"[""Medved Tiaga""]","[""Musk Deer"",""Eurasian Lynx"",""Reindeer"",""Brown Bear""]"
-vurhongasavanna,"[""Vurhonga Savanna""]","[""Scrub Hare"",""Side-Striped Jackal"",""Springbok"",""Lesser Kudu"",""Warthog"",""Blue Wildebeest"",""Gemsbok"",""Cape Buffalo"",""Lion""]"
-parquefernando,"[""Parque Fernando""]","[""Cinnamon Teal"",""Axis Deer"",""Blackbuck"",""Puma"",""Mule Deer"",""Water Buffalo""]"
-yukonvalley,"[""Yukon Valley""]","[""Harlequin Duck"",""Grey Wolf"",""Caribou"",""Grizzly Bear"",""Plains Bison""]"
-cuatrocolinas,"[""Cuatro Colinas""]","[""European Hare"",""Beceite Ibex"",""Gredos Ibex"",""Iberian Mouflon"",""Ronda Ibex"",""Southeastern Ibex"",""Iberian Wolf""]"
-silverridgepeaks,"[""Silver Ridge Peaks""]","[""Turkey"",""Bighorn Sheep"",""Mountain Goat"",""Pronghorn"",""Mountain Lion"",""Rocky Mountain Elk""]"
-teawaroa,"[""Te Awaroa""]","[""European Rabbit"",""Chamois"",""Feral Goat"",""Feral Pig"",""Sika Deer""]"
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
-,,
+﻿locationid,location,locationspecies,feed,rest,drink,borrow
+cuatrocolinas,"[""Cuatro Colinas""]","[""European Hare"",""Beceite Ibex"",""Gredos Ibex"",""Iberian Mouflon"",""Ronda Ibex"",""Southeastern Ibex"",""Iberian Wolf""]","[""00:00-04:00 , 17:00-21:00 (Beceite Ibex)"",""05:00-11:00 , 16:00-22:00 (European Hare)"",""00:00-04:00 , 17:00-21:00 (Gredos Ibex)"",""22:00-02:00 , 15:00-19:00 (Iberian Mouflon)"",""03:00-07:00 , 19:00-00:00 (Iberian Wolf)"",""13:00-17:00 (Red Deer)"",""05:00-09:00 , 17:00-21:00 (Roe Deer)"",""00:00-04:00 , 17:00-21:00 (Ronda Ibex)"",""00:00-04:00 , 17:00-21:00 (Southeastern Ibex)"",""03:00-07:00 , 19:00-23:00 (Wild Boar)""]","[""04:00-08:00 , 11:00-17:00 (Beceite Ibex)"",""22:00-01:00 , 11:00-14:00 (European Hare)"",""04:00-08:00 , 11:00-17:00 (Gredos Ibex)"",""02:00-06:00 , 09:00-15:00 (Iberian Mouflon)"",""07:00-19:00 (Iberian Wolf)"",""21:00-05:00 , 09:00-13:00 (Red Deer)"",""21:00-05:00 ,09:00- 13:00 (Roe Deer)"",""04:00-08:00 , 11:00-17:00 (Ronda Ibex)"",""04:00-08:00 , 11:00-17:00 (Southeastern Ibex)"",""07:00-19:00 (Wild Boar)""]","[""08:00-11:00, 21:00-00:00 (Beceite Ibex)"",""01:00-05:00 , 14:00-16:00 (European Hare)"",""08:00-11:00, 21:00-00:00 (Gredos Ibex)"",""06:00-09:00 , 19:00-22:00 (Iberian Mouflon)"",""00:00-03:00 (Iberian Wolf)"",""05:00-09:00 , 17:00-21:00 (Red Deer)"",""13:00-17:00 (Roe Deer)"",""08:00-11:00, 21:00-00:00 (Ronda Ibex)"",""08:00-11:00, 21:00-00:00 (Southeastern Ibex)"",""23:00-03:00 (Wild Boar)""]","[""N/A (Beceite Ibex)"",""N/A (European Hare)"",""N/A (Gredos Ibex)"",""N/A (Iberian Mouflon)"",""N/A (Iberian Wolf)"",""N/A (Red Deer)"",""N/A (Roe Deer)"",""N/A (Ronda Ibex)"",""N/A (Southeastern Ibex)"",""N/A (Wild Boar)""]"
+hirschfelden,"[""Hirschfelden""]","[""Canada Goose"",""Red Fox"",""Roe Deer"",""Fallow Deer"",""Wild Boar"",""Red Deer"",""European Bison""]","[""Randomly through the day (Canada Goose)"",""19:00-03:00 (European Bison)"",""N/A (European Rabbit)"",""05:00-09:00 , 17:00-21:00 (Fallow Deer)"",""13:00-17:00 (Red Deer)"",""05:00-09:00 , 17:00-21:00 (Roe Deer)"",""03:00-07:00 , 19:00-23:00 (Wild Boar)"",""23:00-07:00 (Red Fox)""]","[""Randomly through the day (Canada Goose)"",""07:00-19:00 (European Bison)"",""N/A (European Rabbit)"",""21:00-05:00 , 13:00-17:00 (Fallow Deer)"",""21:00-05:00 , 09:00-13:00 (Red Deer)"",""21:00-05:00 ,09:00- 13:00 (Roe Deer)"",""07:00-19:00 (Wild Boar)"",""07:00-19:00 (Red Fox)""]","[""05:30-09:30 , 17:30-21:30 (Canada Goose)"",""03:00-07:00 (European Bison)"",""N/A (European Rabbit)"",""09:00-13:00? (Fallow Deer)"",""05:00-09:00 , 17:00-21:00 (Red Deer)"",""13:00-17:00 (Roe Deer)"",""23:00-03:00 (Wild Boar)"",""19:00-23:00 (Red Fox)""]","[""N/A (Canada Goose)"",""N/A (European Bison)"",""05:00-09:00,12:00-16:00,18:00-22:00 (European Rabbit)"",""N/A (Fallow Deer)"",""N/A (Red Deer)"",""N/A (Roe Deer)"",""N/A (Wild Boar)"",""N/A (Red Fox)""]"
+laytonlakes,"[""Layton Lakes""]","[""Jackrabbit"",""Mallard"",""Coyote"",""Blacktail Deer"",""Whitetail Deer"",""Black Bear"",""Moose"",""Roosevelt Elk""]","[""23:00-07:00 (Black Bear)"",""13:00-17:30 (Blacktail Deer)"",""23:00-03:00 (Coyote)"",""05:00-11:30,16:00-22:30 (Jackrabbit)"",""random times during the day (Mallard)"",""05:00-09:30,17:00-21:30 (Moose)"",""09:00-13:30 (Roosevelt Elk)"",""05:00-09:30,15:00-21:30 (Whitetail Deer)""]","[""07:00-19:30 (Black Bear)"",""09:00-13:30,21:00-05:30 (Blacktail Deer)"",""06:00-19:00 (Coyote)"",""00:00-5:30,14:00-1630 (Jackrabbit)"",""random times during the day (Mallard)"",""21:00-05:30 (Moose)"",""21:00-05:30,13:00-17:30 (Roosevelt Elk)"",""09:00-12:30,21:00-05:00 (Whitetail Deer)""]","[""19:00-00:30 (Black Bear)"",""05:00-09:30,17:00-21:30 (Blacktail Deer)"",""03:00-06:00,19:00-23:00 (Coyote)"",""11:00-14:30,22:00-00:30 (Jackrabbit)"",""05:30-9:30,17:30-21:30 (Mallard)"",""09:00-13:30 (Moose)"",""05:00-09:00,17:00-21:30 (Roosevelt Elk)"",""12:00-15:30 (Whitetail Deer)""]","[""N/A (Black Bear)"",""N/A (Blacktail Deer)"",""N/A (Coyote)"",""N/A (Jackrabbit)"",""N/A (Mallard)"",""N/A (Moose)"",""N/A (Roosevelt Elk)"",""N/A (Whitetail Deer)""]"
+medvedtiaga,"[""Medved Tiaga""]","[""Musk Deer"",""Eurasian Lynx"",""Reindeer"",""Brown Bear""]","[""19:00-03:00 (Brown Bear)"",""23:00-07:00 (Eurasian Lynx)"",""05:00-09:30,17:00-21:30 (Moose)"",""09:00-13:00 (Reindeer)"",""11:00-15:00 , 19:00-23:00 (Musk Deer)"",""03:00-07:00 , 19:00-23:00 (Wild Boar)""]","[""07:00-19:00 (Brown Bear)"",""07:00-19:00 (Eurasian Lynx)"",""21:00-05:30 (Moose)"",""21:00-05:00 , 13:00-17:00 (Reindeer)"",""23:00-03:00 , 07:00-11:00 , 15:00-19:00 (Musk Deer)"",""07:00-19:00 (Wild Boar)""]","[""03:00-07:00 (Brown Bear)"",""19:00-23:00 (Eurasian Lynx)"",""09:00-13:30 (Moose)"",""05:00-09:00 , 17:00-21:00 (Reindeer)"",""03:00-07:00 (Musk Deer)"",""23:00-03:00 (Wild Boar)""]","[""N/A (Brown Bear)"",""N/A (Eurasian Lynx)"",""N/A (Moose)"",""N/A (Reindeer)"",""N/A (Musk Deer)"",""N/A (Wild Boar)""]"
+parquefernando,"[""Parque Fernando""]","[""Cinnamon Teal"",""Axis Deer"",""Blackbuck"",""Puma"",""Mule Deer"",""Water Buffalo""]","[""08:00-12:00 , 21:00-00:00 (Axis Deer)"",""08:00-12:00 , 21:00-00:00 (Blackbuck)"",""Randomly (Cinnamon Teal)"",""00:00-04:00 , 17:00-21:00 (Mule Deer)"",""00:00-06:00 (Puma)"",""13:00-17:00 (Red Deer)"",""05:00-10:00 , 17:00-21:00 (Water Buffalo)""]","[""00:00-04:00 , 12:00-18:00 (Axis Deer)"",""19:00-06:00 , 12:00-18:00 (Blackbuck)"",""Randomly (Cinnamon Teal)"",""04:00-09:00 , 12:00-17:00 (Mule Deer)"",""09:00-13:00 , 17:00-21:00 (Puma)"",""21:00-05:00 , 09:00-13:00 (Red Deer)"",""00:00-05:00 , 13:00-17:00 (Water Buffalo)""]","[""04:00-08:00 , 18:00-21:00 (Axis Deer)"",""09:00-12:00 , 17:00-19:00 (Blackbuck)"",""05:30-09:30 , 17:30-21:30 (Cinnamon Teal)"",""09:00-12:00 , 21:00-00:00 (Mule Deer)"",""06:00-09:00 , 13:00-17:00 , 21:00-00:00 (Puma)"",""05:00-09:00 , 17:00-21:00 (Red Deer)"",""10:00-13:00 , 21:00-00:00 (Water Buffalo)""]","[""N/A (Axis Deer)"",""N/A (Blackbuck)"",""N/A (Cinnamon Teal)"",""N/A (Mule Deer)"",""N/A (Puma)"",""N/A (Red Deer)"",""N/A (Water Buffalo)""]"
+silverridgepeaks,"[""Silver Ridge Peaks""]","[""Turkey"",""Bighorn Sheep"",""Mountain Goat"",""Pronghorn"",""Mountain Lion"",""Rocky Mountain Elk""]","[""04:00 - 06:00,08:00 - 21:00 (Bighorn Sheep)"",""23:00-07:00 (Black Bear)"",""00:00 - 03:00,05:00 - 09:00,11:00 - 14:00 (Mountain Goat)"",""00:00 - 06:00,18:30 - 00:00 (Mountain Lion)"",""00:00-04:00 , 17:00-21:00 (Mule Deer)"",""19:00-03:00 (Plains Bison)"",""10:00 - 19:00 (Pronghorn)"",""05:00 - 17:00,18:00 - 00:00 (Rocky Mountain Elk)"",""05:00-15:00,16:00 - 21:00 (Turkey)""]","[""21:00 - 00:00 (Bighorn Sheep)"",""07:00-19:30 (Black Bear)"",""03:00 - 05:00,13:00 - 16:00 (Mountain Goat)"",""08:00 - 17:00 (Mountain Lion)"",""04:00-09:00 , 12:00-17:00 (Mule Deer)"",""07:00-19:00 (Plains Bison)"",""00:00 - 05:00 (Pronghorn)"",""00:00 - 04:00 (Rocky Mountain Elk)"",""00:00 - 05:00,21:00 - 00:00 (Turkey)""]","[""06:00 - 08:00 (Bighorn Sheep)"",""19:00-00:30 (Black Bear)"",""09:00 - 11:00 (Mountain Goat)"",""06:00 - 08:00 (Mountain Lion)"",""09:00-12:00 , 21:00-00:00 (Mule Deer)"",""03:00-07:00 (Plains Bison)"",""08:00 - 10:00,19:00 - 21:00 (Pronghorn)"",""04:00 - 05:00,17:00 - 18:00 (Rocky Mountain Elk)"",""15:00-16:00 (Turkey)""]","[""N/A (Bighorn Sheep)"",""N/A (Black Bear)"",""N/A (Mountain Goat)"",""N/A (Mountain Lion)"",""N/A (Mule Deer)"",""N/A (Plains Bison)"",""N/A (Pronghorn)"",""N/A (Rocky Mountain Elk)"",""N/A (Turkey)""]"
+teawaroa,"[""Te Awaroa""]","[""European Rabbit"",""Chamois"",""Feral Goat"",""Feral Pig"",""Sika Deer""]","[""08:00-12:00,18:00-21:00 (Chamois)"",""N/A (European Rabbit)"",""05:00-09:00 , 17:00-21:00? (Fallow Deer)"",""07:00-10:00,16:00-19:00,19:00-22:00 (Feral Goat)"",""17:00-20:00 (Feral Pig)"",""13:00-17:00? (Red Deer)"",""14:00-18:00,18:00-21:00 (Sika Deer)"",""05:00-15:00,16:00 - 21:00? (Turkey)""]","[""12:00-16:00 (Chamois)"",""N/A (European Rabbit)"",""21:00-05:00 , 13:00-17:00? (Fallow Deer)"",""13:00-16:00 (Feral Goat)"",""11:00-14:00 (Feral Pig)"",""21:00-05:00 , 09:00-13:00? (Red Deer)"",""12:00-14:00 (Sika Deer)"",""00:00 - 05:00,21:00 - 00:00? (Turkey)""]","[""05:00-08:00 (Chamois)"",""N/A (European Rabbit)"",""09:00-13:00? (Fallow Deer)"",""09:00-13:00 (Feral Goat)"",""03:00-06:00 (Feral Pig)"",""05:00-09:00 , 17:00-21:00? (Red Deer)"",""9:00-12:00 (Sika Deer)"",""15:00-16:00? (Turkey)""]","[""N/A (Chamois)"",""05:00-09:00,12:00-16:00,18:00-22:00 (European Rabbit)"",""N/A (Fallow Deer)"",""N/A (Feral Goat)"",""N/A (Feral Pig)"",""N/A (Red Deer)"",""N/A (Sika Deer)"",""N/A (Turkey)""]"
+vurhongasavanna,"[""Vurhonga Savanna""]","[""Scrub Hare"",""Side-Striped Jackal"",""Springbok"",""Lesser Kudu"",""Warthog"",""Blue Wildebeest"",""Gemsbok"",""Cape Buffalo"",""Lion""]","[""03:00-09:00 , 16:00-20:00 (Blue Wildebeest)"",""05:00-08:00 , 12:00-16:00 , 22:00-00:00 (Cape Buffalo)"",""08:00-14:00 ,21:00-00:00 (Gemsbok)"",""04:00-09:00 , 19:00-00:00 (Lesser Kudu)"",""00:00-08:00 (Lion)"",""04:00-09:00 , 15:00-20:00 (Scrub Hare)"",""00:00-04:00 , 18:00-22:00 (Side-Striped Jackal)"",""04:00-09:00 , 19:00-00:00 (Springbok)"",""08:00-13:00 , 20:00-00:00 (Warthog)""]","[""00:00-03:00 , 13:00-20:00 (Blue Wildebeest)"",""00:00-05:00 , 16:00-19:00 (Cape Buffalo)"",""00:00-04:00 , 14:00-18:00 (Gemsbok)"",""10:00-19:00 (Lesser Kudu)"",""08:00-12:00 ,15:00-00:00 (Lion)"",""09:00-15:00 , 20:00-00:00 (Scrub Hare)"",""04:00-11:00 , 15:00-18:00 (Side-Striped Jackal)"",""09:00-15:00 , 00:00-04:00 (Springbok)"",""00:00-04:00 , 13:00-20:00 (Warthog)""]","[""20:00-00:00 (Blue Wildebeest)"",""08:00-12:00 , 19:00-22:00 (Cape Buffalo)"",""04:00-08:00 , 18:00-21:00 (Gemsbok)"",""00:00-04:00 (Lesser Kudu)"",""12:00-15:00 (Lion)"",""00:00-04:00 (Scrub Hare)"",""11:00-15:00 , 22:00-00:00 (Side-Striped Jackal)"",""15:00-19:00 (Springbok)"",""04:00-08:00 (Warthog)""]","[""N/A (Blue Wildebeest)"",""N/A (Cape Buffalo)"",""N/A (Gemsbok)"",""N/A (Lesser Kudu)"",""N/A (Lion)"",""N/A (Scrub Hare)"",""N/A (Side-Striped Jackal)"",""N/A (Springbok)"",""N/A (Warthog)""]"
+yukonvalley,"[""Yukon Valley""]","[""Harlequin Duck"",""Grey Wolf"",""Caribou"",""Grizzly Bear"",""Plains Bison""]","[""09:00-13:00 (Caribou)"",""23:00-07:00 (Gray Wolf)"",""19:00-03:00 (Grizzly Bear)"",""Randomly (Harlequin Duck)"",""05:00-09:30,17:00-21:30 (Moose)"",""19:00-03:00 (Plains Bison)"",""23:00-07:00 (Red Fox)""]","[""21:00-05:00 , 13:00-17:00 (Caribou)"",""07:00-19:00 (Gray Wolf)"",""07:00-19:00 (Grizzly Bear)"",""Randomly (Harlequin Duck)"",""21:00-05:30 (Moose)"",""07:00-19:00 (Plains Bison)"",""07:00-19:00 (Red Fox)""]","[""05:00-09:00 , 17:00-21:00 (Caribou)"",""19:00-23:00 (Gray Wolf)"",""03:00-07:00 (Grizzly Bear)"",""05:30-09:30 , 17:30-21:30 (Harlequin Duck)"",""09:00-13:30 (Moose)"",""03:00-07:00 (Plains Bison)"",""19:00-23:00 (Red Fox)""]","[""N/A (Caribou)"",""N/A (Gray Wolf)"",""N/A (Grizzly Bear)"",""N/A (Harlequin Duck)"",""N/A (Moose)"",""N/A (Plains Bison)"",""N/A (Red Fox)""]"

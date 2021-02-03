@@ -18,9 +18,9 @@ class Scent(Cog):
     @command(name="scents", aliases=["scent"])
     async def get_scents(self,ctx):
 
-        fields = [("Scent Type", "\n".join(i for i in scent_types), False),("\u200b","\u200b",False),("Range","200m",True),("Duration","300s",True),("Strength",50,True),("Units per Canister",10,False)]
+        fields = [("Scent Type", "\n".join(i for i in sorted(scent_types)), False),("Range","200m",True),("Duration","300s",True),("Strength",50,True),("Units per Canister",10,False)]
 
-        embed = Embed(title="Available Scents",description="All scent type stats are identicle",color=0xFF0000)
+        embed = Embed(title="Available Scents",description="All scent type stats are identicle",color=0xE3E300)
         embed.set_author(name="DoubleLung Bot")
         embed.set_thumbnail(url=ctx.message.guild.icon_url)
 
@@ -29,9 +29,7 @@ class Scent(Cog):
 
         embed.set_footer(text=f"{ctx.author.display_name}; {dt_formatted}")
         if ctx.response_channel is not None:
-            await ctx.response_channel.send(embed=embed) 
-
-        await print(self.stdout)
+            await ctx.response_channel.send(embed=embed)
 
     @Cog.listener()
     async def on_ready(self):
