@@ -1,2 +1,5 @@
 discord
 apscheduler
+numpy
+tensorflow
+nltk
