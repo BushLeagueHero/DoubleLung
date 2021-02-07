@@ -14,15 +14,15 @@ import random
 import pickle
 
 import json
-with open('./lib/ai/training/data/nn_commands.json') as f:
-    cmd_data = json.load(f)
+with open('./lib/ai/training/data/nn_stats.json') as f:
+    stat_data = json.load(f)
 
 words = []
 labels = []
 x=[]
 y=[]
 
-for intent in cmd_data['intents']:
+for intent in stat_data['intents']:
     for pattern in intent['pattern']:
         scrape = wt(pattern)
         words.extend(scrape)
@@ -73,10 +73,10 @@ neur_net = tflearn.regression(neur_net)
 
 model = tflearn.DNN(neur_net)
 
-model.fit(training,output,n_epoch=100,batch_size=8,show_metric=True)
-model.save('./lib/ai/cmd_model.tflearn')
+model.fit(training,output,n_epoch=500,batch_size=8,show_metric=True)
+model.save('./lib/ai/stats_model.tflearn')
 
-def conversion_to_command(question,words):
+def conversion_to_stat(question,words):
     user_bag = [0 for _ in range(len(words))]
 
     user_words = nltk.word_tokenize(question)
@@ -95,14 +95,14 @@ def intake_question():
         if question.lower() == "quit":
             break
 
-        results = model.predict([conversion_to_command(question, words)])
+        results = model.predict([conversion_to_stat(question, words)])
         results_index = numpy.argmax(results)
         tag = labels[results_index]
 
-        for t in cmd_data["intents"]:
+        for t in stat_data["intents"]:
             if t["tag"] == tag:
                 response = t["response"]
-        print(results, tag)
+
         print(response)
 
 intake_question()

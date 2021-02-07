@@ -3,3 +3,4 @@ apscheduler
 numpy
 tensorflow
 nltk
+tflearn
