@@ -27,12 +27,25 @@ import pickle
 
 from lib.ai.training.cmd_training import AICommands
 from lib.ai.training.species_training import AISpecies
+from lib.ai.training.stats_training import AIStats
 
 logger = logging.getLogger(f"doublelung.{__name__}")
 
 class AskBot(Cog):
     def __init__(self,bot):
         self.bot = bot
+
+    def run_model(self,modelClass,question):
+        results = modelClass.model.predict([self.conversion_to_command(question, modelClass.words)])
+        results_index = numpy.argmax(results)
+        tag = modelClass.labels[results_index]
+
+        for t in modelClass.model_data["intents"]:
+            if t["tag"] == tag:
+                response = t["response"]
+
+        return response
+
     def conversion_to_command(self,question,words):
         user_bag = [0 for _ in range(len(words))]
 
@@ -50,32 +63,16 @@ class AskBot(Cog):
     async def askBot(self,ctx,*,message):
         question = message
 
-        cmd_results = AICommands.model.predict([self.conversion_to_command(message, AICommands.words)])
-        results_index = numpy.argmax(cmd_results)
-        tag = AICommands.labels[results_index]
-
-        for t in AICommands.cmd_data["intents"]:
-            if t["tag"] == tag:
-                cmd_response = t["response"]
-
+        cmd_response = self.run_model(AICommands,question)
         print(cmd_response)
 
-        question = f"{cmd_response}command {message}"
+        if cmd_response[0] == "species":
+            spcs_response = self.run_model(AISpecies,question)
+            print(spcs_response)
 
-        if cmd_response == "species":
-            print("Yes, run the species AI.")
-            # spcs_results = AISpecies.model.predict([self.conversion_to_command(message, AISpecies.words)])
-            # results_index = numpy.argmax(spcs_results)
-            # tag = AISpceies.labels[results_index]
-
-            # for t in AICommands.cmd_data["intents"]:
-            #     if t["tag"] == tag:
-            #         spcs_response = t["response"]
-            # print(spcs_response)
-        elif cmd_response == "scent":
-            pass
-        else:
-            pass
+        question = f"{cmd_response[0]}command {message}"
+        stats_response = self.run_model(AIStats,question)
+        print(stats_response)
 
     @Cog.listener()
     async def on_ready(self):

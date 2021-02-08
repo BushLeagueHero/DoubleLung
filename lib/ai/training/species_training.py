@@ -17,14 +17,14 @@ import json
 
 class AISpecies():
     with open('./lib/ai/training/data/nn_species.json') as f:
-        species_data = json.load(f)
+        model_data = json.load(f)
 
     words = []
     labels = []
     x=[]
     y=[]
 
-    for intent in species_data['intents']:
+    for intent in model_data['intents']:
         for pattern in intent['pattern']:
             scrape = wt(pattern)
             words.extend(scrape)
@@ -68,8 +68,8 @@ class AISpecies():
     ops.reset_default_graph()
 
     neur_net = tflearn.input_data(shape=[None,len(training[0])])
-    neur_net = tflearn.fully_connected(neur_net,16)
-    neur_net = tflearn.fully_connected(neur_net,16)
+    neur_net = tflearn.fully_connected(neur_net,8)
+    neur_net = tflearn.fully_connected(neur_net,8)
     neur_net = tflearn.fully_connected(neur_net,len(output[0]),activation="softmax")
     neur_net = tflearn.regression(neur_net)
 
