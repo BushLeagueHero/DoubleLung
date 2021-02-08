@@ -15,16 +15,16 @@ import pickle
 
 import json
 
-class AICommands():
-    with open('./lib/ai/training/data/nn_commands.json') as f:
-        cmd_data = json.load(f)
+class AISpecies():
+    with open('./lib/ai/training/data/nn_species.json') as f:
+        species_data = json.load(f)
 
     words = []
     labels = []
     x=[]
     y=[]
 
-    for intent in cmd_data['intents']:
+    for intent in species_data['intents']:
         for pattern in intent['pattern']:
             scrape = wt(pattern)
             words.extend(scrape)
@@ -68,7 +68,6 @@ class AICommands():
     ops.reset_default_graph()
 
     neur_net = tflearn.input_data(shape=[None,len(training[0])])
-    neur_net = tflearn.fully_connected(neur_net,32)
     neur_net = tflearn.fully_connected(neur_net,16)
     neur_net = tflearn.fully_connected(neur_net,16)
     neur_net = tflearn.fully_connected(neur_net,len(output[0]),activation="softmax")
@@ -76,10 +75,10 @@ class AICommands():
 
     model = tflearn.DNN(neur_net)
 
-    model.fit(training,output,n_epoch=100,batch_size=8,show_metric=True)
-    model.save('./lib/ai/cmd_model.tflearn')
+    model.fit(training,output,n_epoch=500,batch_size=8,show_metric=True)
+    model.save('./lib/ai/speciess_model.tflearn')
 
-# def conversion_to_command(question,words):
+# def conversion_to_species(question,words):
 #     user_bag = [0 for _ in range(len(words))]
 
 #     user_words = nltk.word_tokenize(question)
@@ -98,11 +97,11 @@ class AICommands():
 #         if question.lower() == "quit":
 #             break
 
-#         results = model.predict([conversion_to_command(question, words)])
+#         results = model.predict([conversion_to_species(question, words)])
 #         results_index = numpy.argmax(results)
 #         tag = labels[results_index]
 
-#         for t in cmd_data["intents"]:
+#         for t in species_data["intents"]:
 #             if t["tag"] == tag:
 #                 response = t["response"]
 

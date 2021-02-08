@@ -62,16 +62,16 @@ for i,items in enumerate(x):
 training = numpy.array(training)
 output = numpy.array(output)
 
+class AIStats():
+    ops.reset_default_graph()
 
-ops.reset_default_graph()
+    neur_net = tflearn.input_data(shape=[None,len(training[0])])
+    neur_net = tflearn.fully_connected(neur_net,32)
+    neur_net = tflearn.fully_connected(neur_net,32)
+    neur_net = tflearn.fully_connected(neur_net,len(output[0]),activation="softmax")
+    neur_net = tflearn.regression(neur_net)
 
-neur_net = tflearn.input_data(shape=[None,len(training[0])])
-neur_net = tflearn.fully_connected(neur_net,32)
-neur_net = tflearn.fully_connected(neur_net,32)
-neur_net = tflearn.fully_connected(neur_net,len(output[0]),activation="softmax")
-neur_net = tflearn.regression(neur_net)
-
-model = tflearn.DNN(neur_net)
+    model = tflearn.DNN(neur_net)
 
 model.fit(training,output,n_epoch=500,batch_size=8,show_metric=True)
 model.save('./lib/ai/stats_model.tflearn')
