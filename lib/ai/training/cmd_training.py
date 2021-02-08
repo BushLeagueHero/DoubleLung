@@ -7,6 +7,8 @@ nltk.download('punkt')
 import numpy
 import tflearn
 import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
 from tensorflow.python.framework import ops
 
 
@@ -68,43 +70,45 @@ class AICommands():
     ops.reset_default_graph()
 
     neur_net = tflearn.input_data(shape=[None,len(training[0])])
-    neur_net = tflearn.fully_connected(neur_net,8)
+    neur_net = tflearn.fully_connected(neur_net,64)
+    neur_net = tflearn.fully_connected(neur_net,32)
+    neur_net = tflearn.fully_connected(neur_net,16)
     neur_net = tflearn.fully_connected(neur_net,8)
     neur_net = tflearn.fully_connected(neur_net,len(output[0]),activation="softmax")
     neur_net = tflearn.regression(neur_net)
 
     model = tflearn.DNN(neur_net)
 
-    model.fit(training,output,n_epoch=100,batch_size=8,show_metric=True)
+    model.fit(training,output,n_epoch=1000,batch_size=64,show_metric=True)
     model.save('./lib/ai/cmd_model.tflearn')
 
-# def conversion_to_command(question,words):
-#     user_bag = [0 for _ in range(len(words))]
+def conversion_to_command(question,words):
+    user_bag = [0 for _ in range(len(words))]
 
-#     user_words = nltk.word_tokenize(question)
-#     user_words = [stemmer.stem(w.lower()) for w in user_words]
+    user_words = nltk.word_tokenize(question)
+    user_words = [stemmer.stem(w.lower()) for w in user_words]
 
-#     for s in user_words:
-#         for i,w in enumerate(words):
-#             if w == s:
-#                 user_bag[i] = 1
+    for s in user_words:
+        for i,w in enumerate(words):
+            if w == s:
+                user_bag[i] = 1
 
-#     return numpy.array(user_bag)
+    return numpy.array(user_bag)
 
-# def intake_question():
-#     while True:
-#         question = input("AskBot: ")
-#         if question.lower() == "quit":
-#             break
+def intake_question():
+    while True:
+        question = input("AskBot: ")
+        if question.lower() == "quit":
+            break
 
-#         results = model.predict([conversion_to_command(question, words)])
-#         results_index = numpy.argmax(results)
-#         tag = labels[results_index]
+        results = AICommands.model.predict([conversion_to_command(question, AICommands.words)])
+        results_index = numpy.argmax(results)
+        tag = AICommands.labels[results_index]
 
-#         for t in cmd_data["intents"]:
-#             if t["tag"] == tag:
-#                 response = t["response"]
+        for t in AICommands.model_data["intents"]:
+            if t["tag"] == tag:
+                response = t["response"]
 
-#         print(response)
+        print(response)
 
-# intake_question()
+intake_question()

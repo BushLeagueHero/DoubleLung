@@ -66,13 +66,22 @@ class AskBot(Cog):
         cmd_response = self.run_model(AICommands,question)
         print(cmd_response)
 
-        if cmd_response[0] == "species":
-            spcs_response = self.run_model(AISpecies,question)
-            print(spcs_response)
+        cmd_question = f"{cmd_response[0]}command {message}"
+        print(cmd_question)
 
-        question = f"{cmd_response[0]}command {message}"
-        stats_response = self.run_model(AIStats,question)
+        if cmd_response[0] == "species":
+            spcs_response = self.run_model(AISpecies,cmd_question)
+            print(spcs_response)
+        
+        stats_response = self.run_model(AIStats,cmd_question)
         print(stats_response)
+
+        if cmd_response[0] == "species":
+            await ctx.invoke(self.bot.get_command(cmd_response[0]),species=spcs_response[0],group=stats_response[0])
+        elif cmd_response[0] == "scent":
+            await ctx.invoke(self.bot.get_command(cmd_response[0]))
+        else:
+            await ctx.invoke(self.bot.get_command(cmd_response[0]),group=stats_response[0])
 
     @Cog.listener()
     async def on_ready(self):
