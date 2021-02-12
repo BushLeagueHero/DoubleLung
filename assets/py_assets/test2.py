@@ -1,84 +1,31 @@
+import nltk
+from nltk.stem.porter import PorterStemmer
+stemmer = PorterStemmer()
+from nltk.tokenize import word_tokenize as wt
+nltk.download('punkt')
+
 import json
-from re import search
 
-data = json.load(open('./lib/db/object.json'))
-cmd_set = json.load(open('./lib/db/stat.json'))
+data_set = json.load(open('./lib/ai/training/data/test/nn_commands_test.json'))
 
-species = "wildboar"
-group = "ZONE"
+question = input('AskBot: ')
 
-#get speciesID
-def __get_speciesid(species):
-    for i in range(0,len(data["species"])):
-        if data["species"][i]["speciesid"] == species:
-            species_data_set = data["species"][i]
-
-    return species_data_set
-
-#determine keys to use
-def __determine_embed_keys(group):
-    embed_keys = []
-    for i in range(0,len(cmd_set["stats"])):
-        if cmd_set["stats"][i]["group"] == group:
-            embed_keys.append(cmd_set["stats"][i]["id"])
- 
-    return embed_keys
-
-#determine data for each key
-def __pull_key_data(embed_keys,species):
-    key_data = []
-    for key in embed_keys:
-        data = species[key]
-        key_data.append({key:data})
+def prepare_question(question):
+    question_out = []
     
-    return key_data
+    question_words = wt(question)
+    for w in question_words:
+        w = w.replace("'","").replace("-","").replace(".","").replace("/","").lower()
+        if w != "?":
+            question_out.append(stemmer.stem(w)) 
 
-#add each stat from group in embed
-def __add_stat_to_embed(stat,data_set):
-    title = data_set["species"][0]
+    parse_question(question_out)
 
-    for i in range(0,len(cmd_set["stats"])):
-        if cmd_set["stats"][i]["id"] == stat:
-            stat_conf = cmd_set["stats"][i]
+def parse_question(question):   
+    pass
 
-    name = stat_conf["description"]
-    value_obj = []
-    if search("lol_",stat):
-        if stat == "lol_location":
-            for n in range(0,len(data_set[stat])):
-                value_obj.append(data_set[stat][n][0])
-            values = "\n".join(i for i in value_obj)
-        else:
-            stat_list = {}
-            for loc in range(len(data_set["lol_location"])):
-                for s in data_set[stat][loc]:
-                    if s not in stat_list:
-                        stat_list[s] = []
-                    stat_list[s].append(data_set["lol_location"][loc][0])
-            
-            for key,value in stat_list.items():
-                value_obj.append(f"{key} ({', '.join(i for i in value)})")
-            
-            values = "\n".join(i for i in value_obj)
-    else:
-        values = "\n".join(i for i in data_set[stat])
-
-    inline = stat_conf["inline"]
-
-    print(title)
-    print(name, values, inline)
-    
-    # embed.add_field(name=hunt_stats[stat][statkey][0],value="\n".join(i for i in stat_data), inline=hunt_stats[stat][statkey][1])
-
-#build embed
-def __build_embed(species,group):
-    data_set = (__get_speciesid(species))  
-    key_group = __determine_embed_keys(group)
-    data = __pull_key_data(key_group,data_set)
-
-    for stat in key_group:
-        __add_stat_to_embed(stat,data_set)
+def convert_to_command(question):
+    question_data = prepare_question(question)
 
 
-
-__build_embed(species,group)
+convert_to_command(question)

@@ -1,0 +1,9 @@
+{
+    "intents":[ {"tag":"Species Commands","pattern":["axis","deer","beceite","ibex","big","horn","sheep","bighorn","black","bear","black","buck","blackbuck","black","tail","deer","blacktail","blue","wilde","beest","beast","wild","wildebeest","wildebeast","brown","bear","eurasian","asian","canada","goose","geese","canadian","cape","buffalo","caribou","chamois","cinnamon","teal","coyote","eurasian","lynx","asian","european","bison","europe","european","hare","europe","fallow","deer","european","rabbit","europe","feral","goat","feral","pig","hog","gems","bok","gemsbok","gredos","ibex","gredo","grey","wolf","wolves","gray","grizzly","bear","grizzlie","harlequin","duck","harley","harle","quin","iberian","mou","flon","mouflon","iberian","wolf","wolves","jack","rabbit","jackrabbit","lesser","kudu","lion","lioness","mallard","moose","mountain","goat","mountain","lion","mule","deer","musk","deer","plains","bison","prong","horn","pronghorn","puma","red","deer","reddeer","red","fox","rein","deer","rain","reindeer","raindeer","rocky","mountain","elk","rockymountain","roe","deer","roedeer","ronda","ibez","roosevelt","elk","scrub","hare","scrubhare","side","striped","jackal","sidestriped","sika","deer","south","eastern","ibex","southeastern","spring","bok","springbok","turkey","wart","hog","warthog","water","buffalo","white","tail","deer","whitetail","wild","boar"],"response":["species"]},
+                {"tag":"Location Commands","pattern":[],"response":["location"]},
+                {"tag":"Weapon Commands","pattern":[],"response":["weapon"]},
+                {"tag":"Ammo Commands","pattern":[],"response":["ammo"]},
+                {"tag":"Caller Commands","pattern":[],"response":["caller"]},
+                {"tag":"Scent Commands","pattern":[],"response":["scent"]}
+    ]
+}

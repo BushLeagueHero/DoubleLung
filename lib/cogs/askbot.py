@@ -15,8 +15,10 @@ from nltk.stem.lancaster import LancasterStemmer
 stemmer=LancasterStemmer()
 from nltk.tokenize import word_tokenize as wt
 nltk.download('punkt')
+from nltk import Tree
 
 import numpy
+import spacy
 import tflearn
 import tensorflow as tf
 from tensorflow.python.framework import ops
@@ -30,6 +32,11 @@ from lib.ai.training.species_training import AISpecies
 from lib.ai.training.stats_training import AIStats
 
 logger = logging.getLogger(f"doublelung.{__name__}")
+
+def formatted_date():
+    dt = datetime.now()
+    dt_formatted = dt.strftime("%b %d %Y %H:%M:%S")
+    return dt_formatted
 
 class AskBot(Cog):
     def __init__(self,bot):
@@ -61,10 +68,22 @@ class AskBot(Cog):
 
     @command(name="askbot")
     async def askBot(self,ctx,*,message):
+        en_nlp = spacy.load("en_core_web_trf")
         question = message
+        logger.debug(f"processing: {question}")
 
-        cmd_response = self.run_model(AICommands,question)
-        print(cmd_response)
+        scrubbed_list = []
+        doc = en_nlp(question)
+        sentence = next(doc.sents)
+        for word in sentence:
+            logger.debug(f"{word}:{word.dep_}")
+            if "sub" in word.dep_ or "obj" in word.dep_ or "amod" in word.dep_ or "compund" in word.dep_  or "num" in word.dep_:
+                scrubbed_list.append(word)
+                scrubbed_question = ' '.join(str(w) for w in scrubbed_list)
+        logger.debug(f"Input to AICommand: {scrubbed_question}")
+
+        cmd_response = self.run_model(AICommands,scrubbed_question)
+        logger.debug(f"Command: {cmd_response}")
 
         cmd_question = f"{cmd_response[0]}command {message}"
         print(cmd_question)
@@ -72,9 +91,20 @@ class AskBot(Cog):
         if cmd_response[0] == "species":
             spcs_response = self.run_model(AISpecies,cmd_question)
             print(spcs_response)
+            logger.debug(f"Secies: {spcs_response}")
+        
+        if cmd_response[0] == "weapon" or cmd_response[0] == "ammo":
+            embed = Embed(title="Clarify Question",color=0x187206)
+            embed.set_author(name="DoubleLung Bot")
+            embed.set_thumbnail(url=ctx.message.guild.icon_url)
+            embed.add_field(name="question",value="To better answer your question, please indicate if you are looking for information about the weapon version (:regional_indicator_w:) or ammo version (:regional_indicator_a:).",inline=False)
+            embed.set_footer(text=f"{ctx.author.display_name}; {formatted_date()}")
+
+            await ctx.message.channel.send(embed=embed)
         
         stats_response = self.run_model(AIStats,cmd_question)
         print(stats_response)
+        logger.debug(f"Stat: {stats_response}")
 
         if cmd_response[0] == "species":
             await ctx.invoke(self.bot.get_command(cmd_response[0]),species=spcs_response[0],group=stats_response[0])
