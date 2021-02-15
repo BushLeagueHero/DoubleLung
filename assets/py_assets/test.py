@@ -32,14 +32,12 @@ ammo_tags = generate_command_tags(ammo_data_set,"ammo")
 caller_tags = generate_command_tags(caller_data_set,"caller")
 scent_tags = generate_command_tags(scent_data_set,"scent")
 
-update = {"intents":[   {"tag":"species","pattern":species_tags,"respone":"species"},
-                        {"tag":"species","pattern":location_tags,"respone":"location"},
-                        {"tag":"species","pattern":weapon_tags,"respone":"weapon"},
-                        {"tag":"species","pattern":ammo_tags,"respone":"ammo"},
-                        {"tag":"species","pattern":caller_tags,"respone":"caller"},
-                        {"tag":"species","pattern":scent_tags,"respone":"scent"},
-            ]
-        }
+update =    {"species":{"pattern":species_tags,"respone":"species"},
+            "location":{"pattern":location_tags,"respone":"location"},
+            "weapon":{"pattern":weapon_tags,"respone":"weapon"},
+            "ammo":{"pattern":ammo_tags,"respone":"ammo"},
+            "caller":{"pattern":caller_tags,"respone":"caller"},
+            "scent":{"pattern":scent_tags,"respone":"scent"}}
 
 with open('./lib/ai/training/data/test/nn_commands_test.json','w') as f:
     json.dump(update,f)
